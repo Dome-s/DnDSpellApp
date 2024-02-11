@@ -1,6 +1,6 @@
 import React, { useState,useEffect  } from 'react';
 import Collapsible from 'react-collapsible';
-import { BsChevronDown} from 'react-icons/bs';
+import { BsChevronDown,BsFire, BsTools,BsFillPlusCircleFill} from 'react-icons/bs';
 import { AiFillHeart } from "react-icons/ai";
 import './SpellList.css';
 
@@ -265,7 +265,7 @@ const SpellList = ({ spells, spellClasses }) => {
         value={selectedAttackType || 'All'}
       >
         <option value="All">Attack type</option>
-        {["attack role","saving throw"].map((attack) => (
+        {["attack roll","saving throw"].map((attack) => (
           <option key={attack} value={attack}>
             {attack}
           </option>
@@ -290,12 +290,16 @@ const SpellList = ({ spells, spellClasses }) => {
         <h3>Liked Spells Information</h3>
         <p>Total Liked Spells: {likedSpells.length}</p>
         <p>Level : {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((level) => ("lvl " +level+":" + likedSpells.filter((spell) => spell.level === level).length)+"; ")} </p>
-        <p>Action: {likedSpells.filter((spell) => spell.time[0].unit === "action").length}</p>
-        <p>Bonus Action: {likedSpells.filter((spell) => spell.time[0].unit === "bonus").length}</p>
-        <p>reaction: {likedSpells.filter((spell) => spell.time[0].unit === "reaction").length}</p>
-        <p>Damage: {likedSpells.filter((spell) => testDmgType(spell.entries[0])).length}</p>
-        <p>Healing: {likedSpells.filter((spell) => testHealingType(spell.entries[0])).length}</p>
-        <p>Utility: {likedSpells.filter((spell) => testUtilityType(spell.entries[0])).length}</p>
+        <div class="actiontypes">
+        <p class="actiontype">A {likedSpells.filter((spell) => spell.time[0].unit === "action").length} </p>
+        <p class="actiontype">BA {likedSpells.filter((spell) => spell.time[0].unit === "bonus").length} </p>
+        <p class="actiontype">R  {likedSpells.filter((spell) => spell.time[0].unit === "reaction").length}</p>
+        </div>
+        <div class="selectedtypes">
+        <p class="selectedtype"><BsFire class='damage' title="number of damage spells"/> {likedSpells.filter((spell) => testDmgType(spell.entries[0])).length} </p>
+        <p class="selectedtype"><BsFillPlusCircleFill class='healing' title="number of healing spells"/> {likedSpells.filter((spell) => testHealingType(spell.entries[0])).length} </p>
+        <p class="selectedtype"><BsTools class='utility' title="number of utility spells"/>  {likedSpells.filter((spell) => testUtilityType(spell.entries[0])).length} </p>
+        </div>
       </div>
     </div>
      
@@ -317,7 +321,7 @@ const SpellList = ({ spells, spellClasses }) => {
                 <p>{extractDiceNotation(spell.entries[0])}</p>
                 <p>{extractSaveNotation(spell.entries[0])}</p>
               </div>
-              <Collapsible className='details' trigger={['Details', <BsChevronDown />]}>
+              <Collapsible transitionTime ={200}  className='details' trigger={['Details', <BsChevronDown />]}>
                 <div className="infos">
                   <p>Cast Time: {spell.time[0].number +" "+ spell.time[0].unit}</p>
                   <p>Concentration: {spell.duration[0].concentration ? "yes" : "no"}</p>

@@ -1,5 +1,6 @@
 {
   "name": "my-app",
+  "homepage": "https://dome-s.github.io",
   "version": "0.1.0",
   "private": true,
   "main": "public/electron.js",
@@ -24,8 +25,10 @@
     "electron-build": "electron-builder",
     "electron-build-and-run": "npm run react-build && npm run electron-build",
     "electron-start": "concurrently \"cross-env BROWSER=none npm run react-start\" \"wait-on http://localhost:3000 && electron .\"",
+    "add-domain": "echo beispielprojekt.com > build/CNAME",
     "predeploy": "npm run build",
-    "deploy":"gh-pages -d build" 
+    "deploy":"npm run add-domain && gh-pages -d build" 
+
   },
   "eslintConfig": {
     "extends": [
@@ -56,6 +59,5 @@
   "author": "Your Name or Alias",
   "build": {
     "appId": "your appId"
-  },
-  "homepage": "https://Dome-s.github.io/DnDSpellApp"
+  }
 }

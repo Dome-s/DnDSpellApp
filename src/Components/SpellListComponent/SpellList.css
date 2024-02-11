@@ -5,7 +5,7 @@
   --text-color:#d8d8d8;
   --border-color: #000000;
   --like-color:#90ee90;
-  --unlike-color: rgba(18, 18, 18, 0.528);
+  --unlike-color: rgba(18, 18, 18, 0.846);
 
 }
 
@@ -45,9 +45,13 @@ html, .body {
   }
 
 .Collapsible__trigger {
-    display: flex;
-    justify-content: space-between;
-    align-items: center; 
+  display: flex;
+  justify-content: space-between;
+  align-items: center; 
+  position: absolute;
+  width: 90%;
+  padding-top: 10px;
+  bottom: 10px;
   }
   
 .Collapsible__trigger.is-open svg {
@@ -81,12 +85,14 @@ html, .body {
     padding: 16px;
     margin: 16px;
     width: 250px;
+    padding-bottom: 35px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background-color: var(--tertiary-color);
     color: var(--text-color);
-    transition: transform 0.3s ease-in-out;
+    transition: transform 0.1s ease-in-out;
     display: flex;
     flex-direction: column;
+    position: relative;
   }
   
   .info-Container{
@@ -174,4 +180,32 @@ input[type="checkbox"] {
   .header{
     font-family: 'Franklin Gothic Medium';
     font-size: 40px;
+  }
+
+  .selectedtypes{
+    display: flex;
+    justify-content: center;
+    .selectedtype{
+      margin-right: 15px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+    .damage{
+      color: rgb(188, 26, 26);
+    }
+    .healing{
+      color: rgb(0, 178, 0);
+    }
+    .utility{
+      color: rgb(0, 121, 182);
+    }
+  }
+  .actiontypes{
+    display: flex;
+    justify-content: center;
+    .actiontype{
+      margin-right: 15px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
   }
