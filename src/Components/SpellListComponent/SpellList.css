@@ -1,0 +1,177 @@
+:root {
+  --primary-color: #2d403b; 
+  --secondary-color: #00110b;
+  --tertiary-color: #11261e;
+  --text-color:#d8d8d8;
+  --border-color: #000000;
+  --like-color:#90ee90;
+  --unlike-color: rgba(18, 18, 18, 0.528);
+
+}
+
+html, .body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--primary-color);
+}
+
+.likeButton{
+    display: flex;
+    background-color: transparent;
+    border: none;
+    justify-content: space-between;
+    font-size: 18px;
+}
+
+.unlike{
+    color: var(--like-color);
+}
+.like{
+    color: var(--unlike-color);
+}
+.general-infos p{
+  margin: 2px;
+  padding: 0px;
+  align-items: left; 
+}
+.infos {
+    justify-content: space-between;
+    align-items: center; 
+}
+
+.spell-list {
+    text-align: center;
+    display: flex;
+  }
+
+.Collapsible__trigger {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; 
+  }
+  
+.Collapsible__trigger.is-open svg {
+    transform: rotate(180deg);
+  }
+
+.scrollable-container {
+    max-height: 897px; /* Set the maximum height for the scrollable container */
+    max-width: 1580px; /* Set the maximum height for the scrollable container */
+    overflow-y: auto; /* Enable vertical scrolling when content exceeds the height */
+    display: flex; /* Ensure the container is a flex container */
+    flex-wrap: wrap; /* Allow cards to wrap to the next line */
+    justify-content: center; /* Center cards within the container */
+  }
+  .scrollable-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  .card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    background-color: var(--secondary-color);
+    flex-grow: 1;
+    padding: 10px;
+  }
+  
+  .card {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 16px;
+    margin: 16px;
+    width: 250px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: var(--tertiary-color);
+    color: var(--text-color);
+    transition: transform 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .info-Container{
+    max-width: 250px; /* Adjust the width as needed */
+    padding: 10px;
+    border-right: 1px solid #ccc;
+  }
+  .filter{
+    margin-top: 10px;
+    color: var(--text-color);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+  .liked-info-box{
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    color: var(--text-color);
+  }
+  .filterLabel{
+    font-weight: bold;
+    font-size: 30px;
+    color: var(--text-color);
+  }
+  .filterLabel + select{
+    width: 93%;
+  }
+  
+  .search{
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    margin-bottom: 10px;
+    margin-right: 10px;
+    outline: none;
+    border: 1px solid #cccccc00;
+    border-radius: 4px;
+    width: 160px;
+    height: 30px; 
+    font-size: 16px; 
+  }
+  ::placeholder {
+    color: var(--text-color);
+    opacity: 1; /* Firefox */
+  }
+
+input[type="checkbox"] {
+    /* removing default appearance */
+    -webkit-appearance: none;
+    appearance: none;
+    /* creating a custom design */
+    width: 1.6em;
+    height: 1.6em;
+    border-radius: 0.15em;
+    margin-right: 0.5em;
+    border: 0.15em solid var(--secondary-color);
+    outline: none;
+    cursor: pointer;
+  }
+  input.checked {
+    background-color: var(--secondary-color);
+    position: relative;
+  }
+  input.checked::before {
+    position: absolute;
+    right: 1px;
+    top: -5px;
+  }
+
+  .card:hover {
+    transform: scale(1.05);
+  }
+
+  select {
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #cccccc00;
+    border-radius: 4px;
+    margin-bottom: 16px;
+    background-color: var(--tertiary-color);
+    color:var(--text-color) ;
+  }
+
+  .header{
+    font-family: 'Franklin Gothic Medium';
+    font-size: 40px;
+  }
