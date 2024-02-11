@@ -93,7 +93,6 @@ html, .body {
     max-width: 250px; /* Adjust the width as needed */
     padding: 10px;
     border-right: 1px solid #ccc;
-    background-color: red;
   }
   .filter{
     margin-top: 10px;
