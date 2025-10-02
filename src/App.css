@@ -14,10 +14,10 @@
   width: 100%;
   height: 100%;
   background:
-    linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%),
-    radial-gradient(circle at 20% 50%, rgba(120, 60, 200, 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(70, 130, 180, 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 40% 20%, rgba(138, 43, 226, 0.1) 0%, transparent 50%);
+    linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%),
+    radial-gradient(circle at 20% 50%, rgba(6, 182, 212, 0.12) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(59, 130, 246, 0.12) 0%, transparent 50%),
+    radial-gradient(circle at 40% 20%, rgba(16, 185, 129, 0.08) 0%, transparent 50%);
   background-size: 400% 400%, 200% 200%, 200% 200%, 200% 200%;
   animation: gradientShift 20s ease infinite;
   z-index: -2;
@@ -50,16 +50,16 @@
   width: 100%;
   height: 100%;
   background-image:
-    radial-gradient(3px 3px at 20% 30%, rgba(147, 51, 234, 0.3), transparent),
-    radial-gradient(2px 2px at 60% 70%, rgba(139, 92, 246, 0.25), transparent),
-    radial-gradient(2px 2px at 50% 50%, rgba(168, 85, 247, 0.2), transparent),
-    radial-gradient(1px 1px at 80% 10%, rgba(192, 132, 252, 0.3), transparent),
-    radial-gradient(2px 2px at 90% 60%, rgba(147, 51, 234, 0.2), transparent),
-    radial-gradient(3px 3px at 33% 50%, rgba(139, 92, 246, 0.25), transparent),
-    radial-gradient(2px 2px at 79% 53%, rgba(168, 85, 247, 0.2), transparent),
-    radial-gradient(1px 1px at 15% 85%, rgba(192, 132, 252, 0.3), transparent),
-    radial-gradient(2px 2px at 45% 15%, rgba(147, 51, 234, 0.25), transparent),
-    radial-gradient(1px 1px at 70% 40%, rgba(139, 92, 246, 0.2), transparent);
+    radial-gradient(3px 3px at 20% 30%, rgba(6, 182, 212, 0.4), transparent),
+    radial-gradient(2px 2px at 60% 70%, rgba(59, 130, 246, 0.35), transparent),
+    radial-gradient(2px 2px at 50% 50%, rgba(14, 165, 233, 0.25), transparent),
+    radial-gradient(1px 1px at 80% 10%, rgba(34, 211, 238, 0.4), transparent),
+    radial-gradient(2px 2px at 90% 60%, rgba(6, 182, 212, 0.3), transparent),
+    radial-gradient(3px 3px at 33% 50%, rgba(59, 130, 246, 0.35), transparent),
+    radial-gradient(2px 2px at 79% 53%, rgba(14, 165, 233, 0.25), transparent),
+    radial-gradient(1px 1px at 15% 85%, rgba(34, 211, 238, 0.4), transparent),
+    radial-gradient(2px 2px at 45% 15%, rgba(6, 182, 212, 0.35), transparent),
+    radial-gradient(1px 1px at 70% 40%, rgba(59, 130, 246, 0.3), transparent);
   background-size: 200% 200%;
   background-position: 0% 0%;
   animation: floatingParticles 25s ease-in-out infinite;
@@ -93,14 +93,14 @@
   filter: blur(80px);
   opacity: 0.15;
   z-index: -1;
-  animation: float 20s ease-in-out infinite;
+  animation: float 45s ease-in-out infinite;
   pointer-events: none;
 }
 
 .magical-orb-1 {
   width: 400px;
   height: 400px;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: linear-gradient(135deg, #06b6d4, #3b82f6);
   top: 10%;
   left: -10%;
   animation-delay: 0s;
@@ -109,33 +109,36 @@
 .magical-orb-2 {
   width: 350px;
   height: 350px;
-  background: linear-gradient(135deg, #f093fb, #f5576c);
+  background: linear-gradient(135deg, #10b981, #14b8a6);
   bottom: 15%;
   right: -10%;
-  animation-delay: 7s;
+  animation-delay: 15s;
 }
 
 .magical-orb-3 {
   width: 300px;
   height: 300px;
-  background: linear-gradient(135deg, #4facfe, #00f2fe);
+  background: linear-gradient(135deg, #0ea5e9, #06b6d4);
   top: 50%;
   left: 50%;
-  animation-delay: 14s;
+  animation-delay: 30s;
 }
 
 @keyframes float {
-  0%, 100% {
+  0% {
     transform: translate(0, 0) scale(1);
   }
   25% {
-    transform: translate(50px, -50px) scale(1.1);
+    transform: translate(200px, -100px) scale(1.05);
   }
   50% {
-    transform: translate(-30px, 30px) scale(0.9);
+    transform: translate(400px, 50px) scale(0.95);
   }
   75% {
-    transform: translate(40px, 40px) scale(1.05);
+    transform: translate(200px, 150px) scale(1.02);
+  }
+  100% {
+    transform: translate(0, 0) scale(1);
   }
 }
 
