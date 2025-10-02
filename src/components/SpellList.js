@@ -1,7 +1,11 @@
-import React, { useState,useEffect  } from 'react';
+import React, { useState } from 'react';
 import Collapsible from 'react-collapsible';
-import { BsChevronDown,BsFire, BsTools,BsFillPlusCircleFill} from 'react-icons/bs';
-import { AiFillHeart } from "react-icons/ai";
+import { BsChevronDown, BsFire, BsTools, BsFillPlusCircleFill } from 'react-icons/bs';
+import { AiFillHeart } from 'react-icons/ai';
+import { useLocalStorage } from '../hooks/useLocalStorage';
+import { extractDiceNotation, extractSaveNotation, testDmgType, testHealingType, testUtilityType, testAttackRole, testSavingThrow } from '../utils/spellParsers';
+import { extractAvailableClasses } from '../utils/spellFilters';
+import { SPELL_LEVELS, SPELL_TYPES, CONCENTRATION_TYPES, ACTION_TYPES, RADIUS_TYPES, ATTACK_TYPES, COMPONENT_TYPES } from '../constants/spellConstants';
 import './SpellList.css';
 
 const SpellList = ({ spells, spellClasses }) => {
@@ -14,44 +18,13 @@ const SpellList = ({ spells, spellClasses }) => {
   const [selectedRadiusType, setSelectedRadiusType] = useState(null);
   const [selectedAttackType, setSelectedAttackType] = useState(null);
   const [selectedComponentType, setSelectedComponentType] = useState(null);
-  const [likedSpells, setLikedSpells] = useState(() => {
-    const storedLikedSpells = localStorage.getItem('likedSpells');
-    return storedLikedSpells ? JSON.parse(storedLikedSpells) : [];
-  });
-  const [OnlyLikeChecked, setOnlyLikeChecked] = React.useState(false);
+  const [likedSpells, setLikedSpells] = useLocalStorage('likedSpells', []);
+  const [OnlyLikeChecked, setOnlyLikeChecked] = useState(false);
   const [searchInput, setSearchInput] = useState('');
 
   const showOnlyLiked = () => {
     setOnlyLikeChecked(!OnlyLikeChecked);
   };
-
-  useEffect(() => {
-    localStorage.setItem('likedSpells', JSON.stringify(likedSpells));
-  }, [likedSpells]);
-
-  const extractDiceNotation = (text) => {
-    const regex = /\d+d\d+\s*(\w+\s+)?damage/gi;
-    const matches = text.replace(/{@(\w+) ([^}]+)}/g, '$2').match(regex);
-
-    if (matches) {
-      return matches.map((match, index) => (
-        match
-      ));
-    }
-
-    return null;
-  };
-  const extractSaveNotation = (text) => {
-    const regex = /\b\w+\b saving throw\b/gi;
-    const matches = text.replace(/{@(\w+) ([^}]+)}/g, '$2').match(regex);
-
-    if (matches) {
-      return matches[0]
-    }
-
-    return null;
-  };
-
 
   const handleLike = (spell) => {
     setLikedSpells((prevLikedSpells) =>
@@ -83,32 +56,7 @@ const SpellList = ({ spells, spellClasses }) => {
     }
   };
 
-  const availableClasses = Array.from(
-    new Set(
-      Object.values(spellClasses)
-        .flatMap((book) =>
-          Object.values(book)?.flatMap((spells) =>
-            spells?.class?.map((cls) => cls?.name.toLowerCase()),
-          )
-        ).filter(x => x !== undefined)
-    )
-  );
-
-  const testDmgType = (text) => {
-    return /\d+d\d+\s+(\w+\s+)?damage/i.test(text.replace(/{@(\w+) ([^|}]+)\|?[^}]*}/g, '$2'))
-  }
-  const testHealingType = (text) => {
-    return /HL/i.test(text)
-  }
-  const testUtilityType = (text) => {
-    return !(testDmgType(text) || testHealingType(text))
-  }
-  const testAttackRole = (text) => {
-    return /spell attack/i.test(text.replace(/{@(\w+) ([^|}]+)\|?[^}]*}/g, '$2'))
-  }
-  const testSavingThrow = (text) => {
-    return /saving throw/i.test(text.replace(/{@(\w+) ([^|}]+)\|?[^}]*}/g, '$2'))
-  }
+  const availableClasses = extractAvailableClasses(spellClasses);
 
   const filteredSpells = spells.filter((spell) => {
     const levelCondition =  selectedLevel ? spell.level === selectedLevel -1: true;
@@ -180,7 +128,7 @@ const SpellList = ({ spells, spellClasses }) => {
         value={selectedLevel || 'All'}
       >
         <option value="All">Level</option>
-        {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((level) => (
+        {SPELL_LEVELS.map((level) => (
           <option key={level} value={level+1}>
             Level {level}
           </option>
@@ -209,7 +157,7 @@ const SpellList = ({ spells, spellClasses }) => {
         value={selectedType || 'All'}
       >
         <option value="All">Type</option>
-        {["dmg","utility","healing"].map((type) => (
+        {SPELL_TYPES.map((type) => (
           <option key={type} value={type}>
             {type}
           </option>
@@ -223,7 +171,7 @@ const SpellList = ({ spells, spellClasses }) => {
         value={selectedConcentration || 'All'}
       >
         <option value="All">Concentration type</option>
-        {["concentration","no concentration"].map((concentration) => (
+        {CONCENTRATION_TYPES.map((concentration) => (
           <option key={concentration} value={concentration}>
             {concentration}
           </option>
@@ -237,7 +185,7 @@ const SpellList = ({ spells, spellClasses }) => {
         value={selectedAction || 'All'}
       >
         <option value="All">Action type</option>
-        {["action","bonus action","reaction"].map((action) => (
+        {ACTION_TYPES.map((action) => (
           <option key={action} value={action}>
             {action}
           </option>
@@ -251,7 +199,7 @@ const SpellList = ({ spells, spellClasses }) => {
         value={selectedRadiusType || 'All'}
       >
         <option value="All">Radius type</option>
-        {["single target","area","self"].map((radius) => (
+        {RADIUS_TYPES.map((radius) => (
           <option key={radius} value={radius}>
             {radius}
           </option>
@@ -265,7 +213,7 @@ const SpellList = ({ spells, spellClasses }) => {
         value={selectedAttackType || 'All'}
       >
         <option value="All">Attack type</option>
-        {["attack roll","saving throw"].map((attack) => (
+        {ATTACK_TYPES.map((attack) => (
           <option key={attack} value={attack}>
             {attack}
           </option>
@@ -279,7 +227,7 @@ const SpellList = ({ spells, spellClasses }) => {
         value={selectedComponentType || 'All'} 
       >
         <option value="All">Exclude Component</option>
-        {["verbal","semantic","material"].map((component) => (
+        {COMPONENT_TYPES.map((component) => (
           <option key={component} value={component}>
             {component}
           </option>
@@ -289,7 +237,7 @@ const SpellList = ({ spells, spellClasses }) => {
       <div className="liked-info-box">
         <h3>Liked Spells Information</h3>
         <p>Total Liked Spells: {likedSpells.length}</p>
-        <p>Level : {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((level) => ("lvl " +level+":" + likedSpells.filter((spell) => spell.level === level).length)+"; ")} </p>
+        <p>Level : {SPELL_LEVELS.map((level) => ("lvl " +level+":" + likedSpells.filter((spell) => spell.level === level).length)+"; ")} </p>
         <div class="actiontypes">
         <p class="actiontype">A {likedSpells.filter((spell) => spell.time[0].unit === "action").length} </p>
         <p class="actiontype">BA {likedSpells.filter((spell) => spell.time[0].unit === "bonus").length} </p>

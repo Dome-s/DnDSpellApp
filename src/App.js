@@ -1,14 +1,13 @@
-import logo from './logo.svg';
 import './App.css';
-import SpellList from './Components/SpellListComponent/SpellList.js'; 
-import spellsDataPHB from './Spells_PHB.json'; 
-import spellsDataFTD from './Spells_FTD.json'; 
-import spellsDataIDROTF from './Spells_IDROTF.json'; 
-import spellsDataSCC from './Spells_SCC.json'; 
-import spellsDataTCE from './Spells_TCE.json'; 
-import spellsDataTDCSR from './Spells_TDCSR.json'; 
-import spellsDataXGE from './Spells_XGE.json'; 
-import spellsClassesData from './Sources.json';
+import SpellList from './components/SpellList';
+import spellsDataPHB from './data/Spells_PHB.json';
+import spellsDataFTD from './data/Spells_FTD.json';
+import spellsDataIDROTF from './data/Spells_IDROTF.json';
+import spellsDataSCC from './data/Spells_SCC.json';
+import spellsDataTCE from './data/Spells_TCE.json';
+import spellsDataTDCSR from './data/Spells_TDCSR.json';
+import spellsDataXGE from './data/Spells_XGE.json';
+import spellsClassesData from './data/Sources.json';
 /*
 idrotf = Icewind Dale: Rime of the Frostmaiden
 xge = xanathars guide to everything
