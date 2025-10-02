@@ -30,7 +30,14 @@ const combinedSpells = [
 
 const App = () => {
   return (
-    <SpellList spells={combinedSpells} spellClasses={spellsClassesData} />
+    <div className="App">
+      <div className="magical-orb magical-orb-1"></div>
+      <div className="magical-orb magical-orb-2"></div>
+      <div className="magical-orb magical-orb-3"></div>
+      <div className="app-container">
+        <SpellList spells={combinedSpells} spellClasses={spellsClassesData} />
+      </div>
+    </div>
   );
 };
 

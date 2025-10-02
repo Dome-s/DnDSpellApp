@@ -116,7 +116,7 @@ const SpellList = ({ spells, spellClasses }) => {
         />
       </label>
       <label className="filterLabel" htmlFor="OrderDropdown"></label>
-      <select value={orderSelected} onChange={(e) => setSelectedOrder(e.target.value)}>
+      <select value={orderSelected || ''} onChange={(e) => setSelectedOrder(e.target.value)}>
         <option value="name">Sort by Name</option>
         <option value="level">Sort by Level</option>
       </select>
@@ -238,15 +238,15 @@ const SpellList = ({ spells, spellClasses }) => {
         <h3>Liked Spells Information</h3>
         <p>Total Liked Spells: {likedSpells.length}</p>
         <p>Level : {SPELL_LEVELS.map((level) => ("lvl " +level+":" + likedSpells.filter((spell) => spell.level === level).length)+"; ")} </p>
-        <div class="actiontypes">
-        <p class="actiontype">A {likedSpells.filter((spell) => spell.time[0].unit === "action").length} </p>
-        <p class="actiontype">BA {likedSpells.filter((spell) => spell.time[0].unit === "bonus").length} </p>
-        <p class="actiontype">R  {likedSpells.filter((spell) => spell.time[0].unit === "reaction").length}</p>
+        <div className="actiontypes">
+        <p className="actiontype">A {likedSpells.filter((spell) => spell.time[0].unit === "action").length} </p>
+        <p className="actiontype">BA {likedSpells.filter((spell) => spell.time[0].unit === "bonus").length} </p>
+        <p className="actiontype">R  {likedSpells.filter((spell) => spell.time[0].unit === "reaction").length}</p>
         </div>
-        <div class="selectedtypes">
-        <p class="selectedtype"><BsFire class='damage' title="number of damage spells"/> {likedSpells.filter((spell) => testDmgType(spell.entries[0])).length} </p>
-        <p class="selectedtype"><BsFillPlusCircleFill class='healing' title="number of healing spells"/> {likedSpells.filter((spell) => testHealingType(spell.entries[0])).length} </p>
-        <p class="selectedtype"><BsTools class='utility' title="number of utility spells"/>  {likedSpells.filter((spell) => testUtilityType(spell.entries[0])).length} </p>
+        <div className="selectedtypes">
+        <p className="selectedtype"><BsFire className='damage' title="number of damage spells"/> {likedSpells.filter((spell) => testDmgType(spell.entries[0])).length} </p>
+        <p className="selectedtype"><BsFillPlusCircleFill className='healing' title="number of healing spells"/> {likedSpells.filter((spell) => testHealingType(spell.entries[0])).length} </p>
+        <p className="selectedtype"><BsTools className='utility' title="number of utility spells"/>  {likedSpells.filter((spell) => testUtilityType(spell.entries[0])).length} </p>
         </div>
       </div>
     </div>
@@ -259,7 +259,7 @@ const SpellList = ({ spells, spellClasses }) => {
                       return filter;
                     })
           .map((spell, index) => (
-            <div key={index} className="card">
+            <div key={`${spell.name}-${spell.source}-${index}`} className="card">
               <button className="likeButton" onClick={() => handleLike(spell)}>
                 {likedSpells.some((likedSpell) => likedSpell.name === spell.name) ?  <AiFillHeart className='unlike' /> : <AiFillHeart className='like' />}
               </button>
@@ -269,7 +269,7 @@ const SpellList = ({ spells, spellClasses }) => {
                 <p>{extractDiceNotation(spell.entries[0])}</p>
                 <p>{extractSaveNotation(spell.entries[0])}</p>
               </div>
-              <Collapsible transitionTime ={200}  className='details' trigger={['Details', <BsChevronDown />]}>
+              <Collapsible transitionTime ={200}  className='details' trigger={<span>Details <BsChevronDown /></span>}>
                 <div className="infos">
                   <p>Cast Time: {spell.time[0].number +" "+ spell.time[0].unit}</p>
                   <p>Concentration: {spell.duration[0].concentration ? "yes" : "no"}</p>
@@ -287,7 +287,7 @@ const SpellList = ({ spells, spellClasses }) => {
                   </p>
                 </div>
                 {spell.entries.map((entry,index) => (
-                  <div>
+                  <div key={`entry-${spell.name}-${index}`}>
                     {typeof entry === 'string' ? <p>{entry.replace(/{@(\w+) ([^}]+)}/g, '$2')}</p> : null}
                     {entry?.entries ? <p>{index}. {entry.entries[0].replace(/{@(\w+) ([^}]+)}/g, '$2')}</p>: null }
                   </div>
