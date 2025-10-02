@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import Collapsible from 'react-collapsible';
-import { BsChevronDown, BsFire, BsTools, BsFillPlusCircleFill } from 'react-icons/bs';
+import { BsFire, BsTools, BsFillPlusCircleFill } from 'react-icons/bs';
 import { AiFillHeart } from 'react-icons/ai';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { extractDiceNotation, extractSaveNotation, testDmgType, testHealingType, testUtilityType, testAttackRole, testSavingThrow } from '../utils/spellParsers';
@@ -21,6 +20,7 @@ const SpellList = ({ spells, spellClasses }) => {
   const [likedSpells, setLikedSpells] = useLocalStorage('likedSpells', []);
   const [OnlyLikeChecked, setOnlyLikeChecked] = useState(false);
   const [searchInput, setSearchInput] = useState('');
+  const [expandedSpell, setExpandedSpell] = useState(null);
 
   const showOnlyLiked = () => {
     setOnlyLikeChecked(!OnlyLikeChecked);
@@ -259,8 +259,18 @@ const SpellList = ({ spells, spellClasses }) => {
                       return filter;
                     })
           .map((spell, index) => (
-            <div key={`${spell.name}-${spell.source}-${index}`} className="card">
-              <button className="likeButton" onClick={() => handleLike(spell)}>
+            <div
+              key={`${spell.name}-${spell.source}-${index}`}
+              className="card card-compact"
+              onClick={() => setExpandedSpell(spell)}
+            >
+              <button
+                className="likeButton"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleLike(spell);
+                }}
+              >
                 {likedSpells.some((likedSpell) => likedSpell.name === spell.name) ?  <AiFillHeart className='unlike' /> : <AiFillHeart className='like' />}
               </button>
               <h2>{spell.name}</h2>
@@ -269,37 +279,58 @@ const SpellList = ({ spells, spellClasses }) => {
                 <p>{extractDiceNotation(spell.entries[0])}</p>
                 <p>{extractSaveNotation(spell.entries[0])}</p>
               </div>
-              <Collapsible transitionTime ={200}  className='details' trigger={<span>Details <BsChevronDown /></span>}>
-                <div className="infos">
-                  <p>Cast Time: {spell.time[0].number +" "+ spell.time[0].unit}</p>
-                  <p>Concentration: {spell.duration[0].concentration ? "yes" : "no"}</p>
-                  <p>Duration: {spell.duration[0].type ==="instant" ? spell.duration[0].type : spell.duration[0].duration?.amount +" "+ spell.duration[0].duration?.type}</p>
-                  <p>
-                    Range: {spell.range.distance?.amount
-                      ? spell.range.distance.amount + 'ft'
-                      : spell.range.distance?.type}
-                  </p>
-                  <p>
-                    Components: 
-                    {spell.components.v ? ' v' : ''}
-                    {spell.components.s ? ' s' : ''} 
-                    {spell.components.m ? spell.components.m?.text ? " m: "+spell.components.m.text : " m: "+ spell.components.m : ""}
-                  </p>
-                </div>
-                {spell.entries.map((entry,index) => (
-                  <div key={`entry-${spell.name}-${index}`}>
-                    {typeof entry === 'string' ? <p>{entry.replace(/{@(\w+) ([^}]+)}/g, '$2')}</p> : null}
-                    {entry?.entries ? <p>{index}. {entry.entries[0].replace(/{@(\w+) ([^}]+)}/g, '$2')}</p>: null }
-                  </div>
-                ))}
-                <p>{spell.entriesHigherLevel ? spell.entriesHigherLevel[0].entries[0].replace(/{@(\w+) ([^|}]+)\|?[^}]*}/g, '$2') : ""}</p>
-                <p>Classes: {spellClasses[spell.source][spell.name]?.class?.map(cls => cls.name).join(', ')}</p>
-              </Collapsible>
-              
             </div>
-          ))} 
+          ))}
         </div>
       </div>
+
+      {/* Expanded Spell Modal */}
+      {expandedSpell && (
+        <div className="spell-modal-overlay" onClick={() => setExpandedSpell(null)}>
+          <div className="spell-modal-card" onClick={(e) => e.stopPropagation()}>
+            <button className="spell-modal-close" onClick={() => setExpandedSpell(null)}>×</button>
+            <button
+              className="likeButton"
+              onClick={() => handleLike(expandedSpell)}
+              style={{position: 'absolute', top: '20px', right: '60px'}}
+            >
+              {likedSpells.some((likedSpell) => likedSpell.name === expandedSpell.name) ?  <AiFillHeart className='unlike' /> : <AiFillHeart className='like' />}
+            </button>
+            <h2>{expandedSpell.name}</h2>
+            <div className="general-infos">
+              <p><strong>Level:</strong> {expandedSpell.level}</p>
+              <p>{extractDiceNotation(expandedSpell.entries[0])}</p>
+              <p>{extractSaveNotation(expandedSpell.entries[0])}</p>
+            </div>
+            <div className="details">
+              <div className="infos">
+                <p><strong>Cast Time:</strong> {expandedSpell.time[0].number +" "+ expandedSpell.time[0].unit}</p>
+                <p><strong>Concentration:</strong> {expandedSpell.duration[0].concentration ? "yes" : "no"}</p>
+                <p><strong>Duration:</strong> {expandedSpell.duration[0].type ==="instant" ? expandedSpell.duration[0].type : expandedSpell.duration[0].duration?.amount +" "+ expandedSpell.duration[0].duration?.type}</p>
+                <p>
+                  <strong>Range:</strong> {expandedSpell.range.distance?.amount
+                    ? expandedSpell.range.distance.amount + 'ft'
+                    : expandedSpell.range.distance?.type}
+                </p>
+                <p>
+                  <strong>Components:</strong>
+                  {expandedSpell.components.v ? ' v' : ''}
+                  {expandedSpell.components.s ? ' s' : ''}
+                  {expandedSpell.components.m ? expandedSpell.components.m?.text ? " m: "+expandedSpell.components.m.text : " m: "+ expandedSpell.components.m : ""}
+                </p>
+              </div>
+              {expandedSpell.entries.map((entry,index) => (
+                <div key={`modal-entry-${expandedSpell.name}-${index}`}>
+                  {typeof entry === 'string' ? <p>{entry.replace(/{@(\w+) ([^}]+)}/g, '$2')}</p> : null}
+                  {entry?.entries ? <p>{index}. {entry.entries[0].replace(/{@(\w+) ([^}]+)}/g, '$2')}</p>: null }
+                </div>
+              ))}
+              <p>{expandedSpell.entriesHigherLevel ? expandedSpell.entriesHigherLevel[0].entries[0].replace(/{@(\w+) ([^|}]+)\|?[^}]*}/g, '$2') : ""}</p>
+              <p><strong>Classes:</strong> {spellClasses[expandedSpell.source][expandedSpell.name]?.class?.map(cls => cls.name).join(', ')}</p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
