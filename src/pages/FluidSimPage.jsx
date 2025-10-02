@@ -14,17 +14,16 @@ const FluidSimPage = () => {
       </div>
       <div className="fluid-sim-container">
         <FluidSimulation
-          simWidth={256}
-          simHeight={256}
-          dyeResolution={512}
-          densityDissipation={0.98}
-          velocityDissipation={0.99}
-          pressureIterations={20}
-          curl={30}
-          splatRadius={0.005}
-          brightness={0.5}
-          backgroundColor={{ r: 0, g: 0, b: 0 }}
-          transparent={false}
+          width={1024}
+          height={720}
+          dissipation={0.01}
+          velDissipation={0.1}
+          velocityScale={200}
+          splatRadius={0.07}
+          splatSpeed={20}
+          splatColor={[1, 0.4, 0.1, 1]}
+          buoyancy={-4}
+          jacobiIterations={120}
         />
       </div>
     </div>
