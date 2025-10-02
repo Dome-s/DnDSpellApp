@@ -99,6 +99,7 @@ const SpellList = ({ spells, spellClasses }) => {
     <div className="spell-list">
       <div className='info-Container'>
       <div className='filter'>
+      <div className='search-like-container'>
       <input
           className='search'
           type="text"
@@ -115,6 +116,7 @@ const SpellList = ({ spells, spellClasses }) => {
           className={OnlyLikeChecked ? "checked" : ""}
         />
       </label>
+      </div>
       <label className="filterLabel" htmlFor="OrderDropdown"></label>
       <select value={orderSelected || ''} onChange={(e) => setSelectedOrder(e.target.value)}>
         <option value="name">Sort by Name</option>
@@ -235,18 +237,36 @@ const SpellList = ({ spells, spellClasses }) => {
       </select> 
       </div>
       <div className="liked-info-box">
-        <h3>Liked Spells Information</h3>
-        <p>Total Liked Spells: {likedSpells.length}</p>
-        <p>Level : {SPELL_LEVELS.map((level) => ("lvl " +level+":" + likedSpells.filter((spell) => spell.level === level).length)+"; ")} </p>
-        <div className="actiontypes">
-        <p className="actiontype">A {likedSpells.filter((spell) => spell.time[0].unit === "action").length} </p>
-        <p className="actiontype">BA {likedSpells.filter((spell) => spell.time[0].unit === "bonus").length} </p>
-        <p className="actiontype">R  {likedSpells.filter((spell) => spell.time[0].unit === "reaction").length}</p>
+        <h3>Liked Spells</h3>
+        <p>Total: {likedSpells.length} Spell{likedSpells.length !== 1 ? 's' : ''}</p>
+
+        <div className="level-counters">
+          {SPELL_LEVELS.map((level) => {
+            const count = likedSpells.filter((spell) => spell.level === level).length;
+            const maxCount = Math.max(...SPELL_LEVELS.map(l => likedSpells.filter(s => s.level === l).length), 1);
+            const barHeight = maxCount > 0 ? (count / maxCount) * 100 : 0;
+            return (
+              <div key={level} className="level-counter">
+                <span className="level-num">Lvl {level}</span>
+                <div className="level-bar">
+                  <div className="level-bar-fill" style={{height: `${barHeight}%`}}></div>
+                  <span className="level-count">{count}</span>
+                </div>
+              </div>
+            );
+          })}
         </div>
+
+        <div className="actiontypes">
+          <p className="actiontype">A {likedSpells.filter((spell) => spell.time[0].unit === "action").length}</p>
+          <p className="actiontype">BA {likedSpells.filter((spell) => spell.time[0].unit === "bonus").length}</p>
+          <p className="actiontype">R {likedSpells.filter((spell) => spell.time[0].unit === "reaction").length}</p>
+        </div>
+
         <div className="selectedtypes">
-        <p className="selectedtype"><BsFire className='damage' title="number of damage spells"/> {likedSpells.filter((spell) => testDmgType(spell.entries[0])).length} </p>
-        <p className="selectedtype"><BsFillPlusCircleFill className='healing' title="number of healing spells"/> {likedSpells.filter((spell) => testHealingType(spell.entries[0])).length} </p>
-        <p className="selectedtype"><BsTools className='utility' title="number of utility spells"/>  {likedSpells.filter((spell) => testUtilityType(spell.entries[0])).length} </p>
+          <p className="selectedtype"><BsFire className='damage' title="number of damage spells"/> {likedSpells.filter((spell) => testDmgType(spell.entries[0])).length}</p>
+          <p className="selectedtype"><BsFillPlusCircleFill className='healing' title="number of healing spells"/> {likedSpells.filter((spell) => testHealingType(spell.entries[0])).length}</p>
+          <p className="selectedtype"><BsTools className='utility' title="number of utility spells"/> {likedSpells.filter((spell) => testUtilityType(spell.entries[0])).length}</p>
         </div>
       </div>
     </div>
@@ -273,11 +293,20 @@ const SpellList = ({ spells, spellClasses }) => {
               >
                 {likedSpells.some((likedSpell) => likedSpell.name === spell.name) ?  <AiFillHeart className='unlike' /> : <AiFillHeart className='like' />}
               </button>
-              <h2>{spell.name}</h2>
+              <h2 className="spell-name">{spell.name}</h2>
               <div className="general-infos">
-                <p>Level: {spell.level}</p>
-                <p>{extractDiceNotation(spell.entries[0])}</p>
-                <p>{extractSaveNotation(spell.entries[0])}</p>
+                <p>
+                  <span className="spell-level-badge">{spell.level}</span>
+                  <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.5px', opacity: 0.7}}>
+                    {spell.level === 0 ? 'Cantrip' : ``}
+                  </span>
+                </p>
+                {extractDiceNotation(spell.entries[0]) && (
+                  <span className="spell-info-tag damage">{extractDiceNotation(spell.entries[0])}</span>
+                )}
+                {extractSaveNotation(spell.entries[0]) && (
+                  <span className="spell-info-tag save">{extractSaveNotation(spell.entries[0])}</span>
+                )}
               </div>
             </div>
           ))}

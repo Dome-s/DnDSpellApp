@@ -73,10 +73,10 @@ html, .body {
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--card-border);
   border-radius: 20px;
-  padding: 24px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 10px;
   box-shadow: var(--shadow-md);
   transition: all 0.3s ease;
 }
@@ -100,12 +100,12 @@ html, .body {
 /* Search Input */
 .search {
   width: 100%;
-  padding: 12px 16px;
+  padding: 10px 14px;
   background: rgba(255, 255, 255, 0.08);
   border: 2px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
+  border-radius: 10px;
   color: var(--text-primary);
-  font-size: 15px;
+  font-size: 14px;
   font-family: 'Poppins', sans-serif;
   transition: all 0.3s ease;
   outline: none;
@@ -121,28 +121,38 @@ html, .body {
   color: var(--text-muted);
 }
 
+.search-like-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.spell-name{
+  max-width: 85%;
+}
+
 /* Select Dropdowns */
 select {
   width: 100%;
-  padding: 12px 16px;
-  font-size: 15px;
+  padding: 10px 14px;
+  padding-right: 38px;
+  font-size: 14px;
   font-family: 'Poppins', sans-serif;
   border: 2px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--text-primary);
-  cursor: pointer;
-  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-  outline: none;
-  appearance: none;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.08);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23ffffff' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 12px center;
-  padding-right: 40px;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  outline: none;
+  appearance: none;
 }
 
 select:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background-color: rgba(255, 255, 255, 0.12);
   border-color: rgba(255, 255, 255, 0.2);
 }
 
@@ -200,7 +210,7 @@ input[type="checkbox"].checked::before {
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--card-border);
   border-radius: 20px;
-  padding: 24px;
+  padding: 20px;
   color: var(--text-primary);
   box-shadow: var(--shadow-md);
   transition: all 0.3s ease;
@@ -213,20 +223,96 @@ input[type="checkbox"].checked::before {
 
 .liked-info-box h3 {
   font-family: 'Cinzel', serif;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 600;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   background: var(--primary-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-.liked-info-box p {
-  margin: 8px 0;
+.liked-info-box > p:first-of-type {
   font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+  padding: 10px;
+  background: rgba(139, 92, 246, 0.1);
+  border-radius: 8px;
+  border: 1px solid rgba(139, 92, 246, 0.2);
+}
+
+.liked-info-box p {
+  margin: 6px 0;
+  font-size: 12px;
   color: var(--text-secondary);
-  line-height: 1.6;
+  line-height: 1.5;
+}
+
+.level-counters {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  margin: 10px 0;
+}
+
+.level-counter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 6px 3px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.level-counter:hover {
+  background: rgba(139, 92, 246, 0.1);
+  transform: translateY(-2px);
+}
+
+.level-counter .level-num {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.level-counter .level-bar {
+  width: 100%;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 5px;
+  position: relative;
+  overflow: hidden;
+}
+
+.level-counter .level-bar-fill {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(135deg, #4c3aed, #6d55f7);
+  border-radius: 6px;
+  transition: height 0.5s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.level-counter .level-count {
+  font-size: 12px;
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
 }
 
 .actiontypes,
@@ -320,7 +406,7 @@ input[type="checkbox"].checked::before {
   position: relative;
   animation: cardFadeIn 0.6s ease-out backwards;
   animation-delay: calc(var(--index) * 0.05s);
-  min-height: 220px;
+  min-height: 230px;
 }
 
 @keyframes cardFadeIn {
@@ -432,13 +518,60 @@ input[type="checkbox"].checked::before {
 /* General Info */
 .general-infos {
   margin: 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .general-infos p {
-  margin: 6px 0;
-  font-size: 14px;
+  margin: 0;
+  font-size: 13px;
   color: var(--text-secondary);
   line-height: 1.6;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.spell-level-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+  padding: 0 10px;
+  background: linear-gradient(135deg, #4c3aed, #6d55f7);
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 16px;
+  color: white;
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.4);
+  letter-spacing: 0.5px;
+}
+
+.spell-info-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.spell-info-tag.damage {
+  background: rgba(250, 148, 148, 0.103);
+  border-color: rgba(248, 113, 113, 0.3);
+  color: var(--damage-color);
+}
+
+.spell-info-tag.save {
+  background: rgba(96, 165, 250, 0.15);
+  border-color: rgba(96, 165, 250, 0.3);
+  color: var(--utility-color);
 }
 
 /* Collapsible */
