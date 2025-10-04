@@ -55,9 +55,9 @@ const SpellList: React.FC<SpellListProps> = ({ spells, spellClasses }) => {
   };
 
   const handleLike = (spell: Spell) => {
-    setLikedSpells((prevLikedSpells) =>
-      prevLikedSpells.some((prevSpell) => prevSpell.name === spell.name)
-        ? prevLikedSpells.filter((prevSpell) => prevSpell.name !== spell.name)
+    setLikedSpells((prevLikedSpells: Spell[]) =>
+      prevLikedSpells.some((prevSpell: Spell) => prevSpell.name === spell.name)
+        ? prevLikedSpells.filter((prevSpell: Spell) => prevSpell.name !== spell.name)
         : [...prevLikedSpells, spell]
     );
   };
@@ -73,13 +73,13 @@ const SpellList: React.FC<SpellListProps> = ({ spells, spellClasses }) => {
           (cls: any) => cls.name.toLowerCase() === selectedClass.toLowerCase()
         )
       : true;
-    const likedCondition = !OnlyLikeChecked ? true : likedSpells.some((likedSpell) => likedSpell.name === spell.name);
+    const likedCondition = !OnlyLikeChecked ? true : likedSpells.some((likedSpell: Spell) => likedSpell.name === spell.name);
     const searchCondition = searchInput ? spell.name.toLowerCase().includes(searchInput.toLowerCase()) : true;
     const typeCondition = selectedType
       ? selectedType === 'dmg'
         ? testDmgType(spell.entries[0])
         : selectedType === 'healing'
-        ? testHealingType(spell.miscTags)
+        ? testHealingType(spell.miscTags?.join(',') || '')
         : selectedType === 'utility'
         ? testUtilityType(spell.entries[0])
         : true
@@ -313,8 +313,8 @@ const SpellList: React.FC<SpellListProps> = ({ spells, spellClasses }) => {
             {/* Level Counters */}
             <div className="grid grid-cols-5 gap-1.5 my-2.5">
               {SPELL_LEVELS.map((level) => {
-                const count = likedSpells.filter((spell) => spell.level === level).length;
-                const maxCount = Math.max(...SPELL_LEVELS.map((l) => likedSpells.filter((s) => s.level === l).length), 1);
+                const count = likedSpells.filter((spell: Spell) => spell.level === level).length;
+                const maxCount = Math.max(...SPELL_LEVELS.map((l) => likedSpells.filter((s: Spell) => s.level === l).length), 1);
                 return (
                   <LevelCounter key={level} level={level} count={count} maxCount={maxCount} />
                 );
@@ -323,21 +323,21 @@ const SpellList: React.FC<SpellListProps> = ({ spells, spellClasses }) => {
 
             {/* Action Types */}
             <div className="flex gap-4 mt-3 flex-wrap">
-              <StatBadge>A {likedSpells.filter((spell) => spell.time[0].unit === 'action').length}</StatBadge>
-              <StatBadge>BA {likedSpells.filter((spell) => spell.time[0].unit === 'bonus').length}</StatBadge>
-              <StatBadge>R {likedSpells.filter((spell) => spell.time[0].unit === 'reaction').length}</StatBadge>
+              <StatBadge>A {likedSpells.filter((spell: Spell) => spell.time[0].unit === 'action').length}</StatBadge>
+              <StatBadge>BA {likedSpells.filter((spell: Spell) => spell.time[0].unit === 'bonus').length}</StatBadge>
+              <StatBadge>R {likedSpells.filter((spell: Spell) => spell.time[0].unit === 'reaction').length}</StatBadge>
             </div>
 
             {/* Spell Types */}
             <div className="flex gap-4 mt-3 flex-wrap">
               <StatBadge icon={<BsFire className="text-red-400 drop-shadow-[0_0_4px_rgba(248,113,113,0.6)]" title="number of damage spells" />}>
-                {likedSpells.filter((spell) => testDmgType(spell.entries[0])).length}
+                {likedSpells.filter((spell: Spell) => testDmgType(spell.entries[0])).length}
               </StatBadge>
               <StatBadge icon={<BsFillPlusCircleFill className="text-green-400 drop-shadow-[0_0_4px_rgba(74,222,128,0.6)]" title="number of healing spells" />}>
-                {likedSpells.filter((spell) => testHealingType(spell.entries[0])).length}
+                {likedSpells.filter((spell: Spell) => testHealingType(spell.entries[0])).length}
               </StatBadge>
               <StatBadge icon={<BsTools className="text-blue-400 drop-shadow-[0_0_4px_rgba(96,165,250,0.6)]" title="number of utility spells" />}>
-                {likedSpells.filter((spell) => testUtilityType(spell.entries[0])).length}
+                {likedSpells.filter((spell: Spell) => testUtilityType(spell.entries[0])).length}
               </StatBadge>
             </div>
           </CardContent>
@@ -359,7 +359,7 @@ const SpellList: React.FC<SpellListProps> = ({ spells, spellClasses }) => {
                   <SpellCard
                     key={`${spell.name}-${spell.source}-${index}`}
                     spell={spell}
-                    isLiked={likedSpells.some((likedSpell) => likedSpell.name === spell.name)}
+                    isLiked={likedSpells.some((likedSpell: Spell) => likedSpell.name === spell.name)}
                     onLike={handleLike}
                     onClick={setExpandedSpell}
                   />
@@ -373,7 +373,7 @@ const SpellList: React.FC<SpellListProps> = ({ spells, spellClasses }) => {
         spell={expandedSpell}
         isOpen={!!expandedSpell}
         onClose={() => setExpandedSpell(null)}
-        isLiked={expandedSpell ? likedSpells.some((likedSpell) => likedSpell.name === expandedSpell.name) : false}
+        isLiked={expandedSpell ? likedSpells.some((likedSpell: Spell) => likedSpell.name === expandedSpell.name) : false}
         onLike={handleLike}
         spellClasses={spellClasses}
       />

@@ -1,5 +1,5 @@
 import React from 'react';
-import SpellList from '../components/SpellList';
+import SpellList from '../components/SpellList.tsx';
 import spellsDataPHB from '../data/Spells_PHB.json';
 import spellsDataFTD from '../data/Spells_FTD.json';
 import spellsDataIDROTF from '../data/Spells_IDROTF.json';

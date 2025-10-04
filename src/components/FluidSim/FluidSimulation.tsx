@@ -9,8 +9,8 @@ import {
   type ShaderProgram,
   type DoubleFBO,
   type FramebufferObject,
-} from './webgl-utils.ts';
-import * as shaders from './shaders.ts';
+} from './webgl-utils';
+import * as shaders from './shaders';
 
 export interface FluidSimulationProps {
   width?: number;
@@ -267,11 +267,17 @@ export function FluidSimulation({
 
     if (!gl || !quad || !fbos.dye || !fbos.velocity || !fbos.pressure || !fbos.divergence) return;
 
+    // Create local non-null references for TypeScript
+    const dyeFBO = fbos.dye;
+    const velocityFBO = fbos.velocity;
+    const pressureFBO = fbos.pressure;
+    const divergenceFBO = fbos.divergence;
+
     const simulate = (time: number) => {
       const dt = lastTimeRef.current ? Math.min((time - lastTimeRef.current) / 1000, 0.016) : 0.016;
       lastTimeRef.current = time;
 
-      const texelSize = [1 / width, 1 / height];
+      const texelSize: [number, number] = [1 / width, 1 / height];
 
       // Splat on mouse input
       if (mouseRef.current.down && programs.splat) {
@@ -279,13 +285,13 @@ export function FluidSimulation({
         const dy = mouseRef.current.y - mouseRef.current.prevY;
 
         // Splat dye - write to WRITE buffer, read from READ buffer
-        gl.bindFramebuffer(gl.FRAMEBUFFER, fbos.dye.write.framebuffer);
+        gl.bindFramebuffer(gl.FRAMEBUFFER, dyeFBO.write.framebuffer);
         gl.useProgram(programs.splat.program);
         gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_2D, fbos.dye.read.texture);
+        gl.bindTexture(gl.TEXTURE_2D, dyeFBO.read.texture);
         gl.uniform1i(programs.splat.uniforms['u_dyeTexture'], 0);
         gl.activeTexture(gl.TEXTURE1);
-        gl.bindTexture(gl.TEXTURE_2D, fbos.velocity.read.texture);
+        gl.bindTexture(gl.TEXTURE_2D, velocityFBO.read.texture);
         gl.uniform1i(programs.splat.uniforms['u_velocityTexture'], 1);
         gl.uniform2f(programs.splat.uniforms['u_splatPos'], mouseRef.current.x, mouseRef.current.y);
         gl.uniform1f(programs.splat.uniforms['u_splatRadius'], splatRadius);
@@ -298,12 +304,12 @@ export function FluidSimulation({
         gl.enableVertexAttribArray(posLoc);
         gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-        fbos.dye.swap();
+        dyeFBO.swap();
 
         // Splat velocity - write to WRITE buffer, read from READ buffer
-        gl.bindFramebuffer(gl.FRAMEBUFFER, fbos.velocity.write.framebuffer);
+        gl.bindFramebuffer(gl.FRAMEBUFFER, velocityFBO.write.framebuffer);
         gl.activeTexture(gl.TEXTURE1);
-        gl.bindTexture(gl.TEXTURE_2D, fbos.velocity.read.texture);
+        gl.bindTexture(gl.TEXTURE_2D, velocityFBO.read.texture);
         gl.uniform1i(programs.splat.uniforms['u_velocityTexture'], 1);
         // Apply force - velocity in pixels per second
         const fx = dx * splatSpeed * width;
@@ -311,18 +317,18 @@ export function FluidSimulation({
         gl.uniform2f(programs.splat.uniforms['u_splatForce'], fx, fy);
         gl.uniform1i(programs.splat.uniforms['u_texType'], 1);
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-        fbos.velocity.swap();
+        velocityFBO.swap();
       }
 
       // 1. Advect dye
       if (programs.advectDye) {
-        gl.bindFramebuffer(gl.FRAMEBUFFER, fbos.dye.write.framebuffer);
+        gl.bindFramebuffer(gl.FRAMEBUFFER, dyeFBO.write.framebuffer);
         gl.useProgram(programs.advectDye.program);
         gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_2D, fbos.dye.read.texture);
+        gl.bindTexture(gl.TEXTURE_2D, dyeFBO.read.texture);
         gl.uniform1i(programs.advectDye.uniforms['u_dyeTexture'], 0);
         gl.activeTexture(gl.TEXTURE1);
-        gl.bindTexture(gl.TEXTURE_2D, fbos.velocity.read.texture);
+        gl.bindTexture(gl.TEXTURE_2D, velocityFBO.read.texture);
         gl.uniform1i(programs.advectDye.uniforms['u_velocityTexture'], 1);
         gl.uniform2f(programs.advectDye.uniforms['u_texelSize'], ...texelSize);
         gl.uniform1f(programs.advectDye.uniforms['u_dt'], dt);
@@ -334,15 +340,15 @@ export function FluidSimulation({
         gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
-        fbos.dye.swap();
+        dyeFBO.swap();
       }
 
       // 2. Advect velocity
       if (programs.advectVelocity) {
-        gl.bindFramebuffer(gl.FRAMEBUFFER, fbos.velocity.write.framebuffer);
+        gl.bindFramebuffer(gl.FRAMEBUFFER, velocityFBO.write.framebuffer);
         gl.useProgram(programs.advectVelocity.program);
         gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_2D, fbos.velocity.read.texture);
+        gl.bindTexture(gl.TEXTURE_2D, velocityFBO.read.texture);
         gl.uniform1i(programs.advectVelocity.uniforms['u_velocityTexture'], 0);
         gl.uniform2f(programs.advectVelocity.uniforms['u_texelSize'], ...texelSize);
         gl.uniform1f(programs.advectVelocity.uniforms['u_dt'], dt);
@@ -354,18 +360,18 @@ export function FluidSimulation({
         gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
-        fbos.velocity.swap();
+        velocityFBO.swap();
       }
 
       // 3. Apply buoyancy
       if (programs.buoyancy) {
-        gl.bindFramebuffer(gl.FRAMEBUFFER, fbos.velocity.write.framebuffer);
+        gl.bindFramebuffer(gl.FRAMEBUFFER, velocityFBO.write.framebuffer);
         gl.useProgram(programs.buoyancy.program);
         gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_2D, fbos.velocity.read.texture);
+        gl.bindTexture(gl.TEXTURE_2D, velocityFBO.read.texture);
         gl.uniform1i(programs.buoyancy.uniforms['u_velocityTexture'], 0);
         gl.activeTexture(gl.TEXTURE1);
-        gl.bindTexture(gl.TEXTURE_2D, fbos.dye.read.texture);
+        gl.bindTexture(gl.TEXTURE_2D, dyeFBO.read.texture);
         gl.uniform1i(programs.buoyancy.uniforms['u_dyeTexture'], 1);
         gl.uniform1f(programs.buoyancy.uniforms['u_buoyancy'], buoyancy);
         gl.uniform1f(programs.buoyancy.uniforms['u_ambientDensity'], 0);
@@ -377,15 +383,15 @@ export function FluidSimulation({
         gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
-        fbos.velocity.swap();
+        velocityFBO.swap();
       }
 
       // 4. Enforce boundaries
       if (programs.boundary) {
-        gl.bindFramebuffer(gl.FRAMEBUFFER, fbos.velocity.write.framebuffer);
+        gl.bindFramebuffer(gl.FRAMEBUFFER, velocityFBO.write.framebuffer);
         gl.useProgram(programs.boundary.program);
         gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_2D, fbos.velocity.read.texture);
+        gl.bindTexture(gl.TEXTURE_2D, velocityFBO.read.texture);
         gl.uniform1i(programs.boundary.uniforms['u_velocityTexture'], 0);
         gl.uniform2f(programs.boundary.uniforms['u_resolution'], width, height);
 
@@ -395,15 +401,15 @@ export function FluidSimulation({
         gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
-        fbos.velocity.swap();
+        velocityFBO.swap();
       }
 
       // 5. Compute divergence
       if (programs.divergence) {
-        gl.bindFramebuffer(gl.FRAMEBUFFER, fbos.divergence.framebuffer);
+        gl.bindFramebuffer(gl.FRAMEBUFFER, divergenceFBO.framebuffer);
         gl.useProgram(programs.divergence.program);
         gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_2D, fbos.velocity.read.texture);
+        gl.bindTexture(gl.TEXTURE_2D, velocityFBO.read.texture);
         gl.uniform1i(programs.divergence.uniforms['u_velocityTexture'], 0);
         gl.uniform2f(programs.divergence.uniforms['u_texelSize'], ...texelSize);
 
@@ -417,13 +423,13 @@ export function FluidSimulation({
       // 6. Jacobi pressure iterations
       if (programs.jacobi) {
         for (let i = 0; i < jacobiIterations; i++) {
-          gl.bindFramebuffer(gl.FRAMEBUFFER, fbos.pressure.write.framebuffer);
+          gl.bindFramebuffer(gl.FRAMEBUFFER, pressureFBO.write.framebuffer);
           gl.useProgram(programs.jacobi.program);
           gl.activeTexture(gl.TEXTURE0);
-          gl.bindTexture(gl.TEXTURE_2D, fbos.pressure.read.texture);
+          gl.bindTexture(gl.TEXTURE_2D, pressureFBO.read.texture);
           gl.uniform1i(programs.jacobi.uniforms['u_pressureTexture'], 0);
           gl.activeTexture(gl.TEXTURE1);
-          gl.bindTexture(gl.TEXTURE_2D, fbos.divergence.texture);
+          gl.bindTexture(gl.TEXTURE_2D, divergenceFBO.texture);
           gl.uniform1i(programs.jacobi.uniforms['u_divergenceTexture'], 1);
           gl.uniform2f(programs.jacobi.uniforms['u_texelSize'], ...texelSize);
 
@@ -433,19 +439,19 @@ export function FluidSimulation({
           gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
           gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
-          fbos.pressure.swap();
+          pressureFBO.swap();
         }
       }
 
       // 7. Subtract pressure gradient (projection)
       if (programs.projection) {
-        gl.bindFramebuffer(gl.FRAMEBUFFER, fbos.velocity.write.framebuffer);
+        gl.bindFramebuffer(gl.FRAMEBUFFER, velocityFBO.write.framebuffer);
         gl.useProgram(programs.projection.program);
         gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_2D, fbos.velocity.read.texture);
+        gl.bindTexture(gl.TEXTURE_2D, velocityFBO.read.texture);
         gl.uniform1i(programs.projection.uniforms['u_velocityTexture'], 0);
         gl.activeTexture(gl.TEXTURE1);
-        gl.bindTexture(gl.TEXTURE_2D, fbos.pressure.read.texture);
+        gl.bindTexture(gl.TEXTURE_2D, pressureFBO.read.texture);
         gl.uniform1i(programs.projection.uniforms['u_pressureTexture'], 1);
         gl.uniform2f(programs.projection.uniforms['u_texelSize'], ...texelSize);
 
@@ -455,15 +461,15 @@ export function FluidSimulation({
         gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
-        fbos.velocity.swap();
+        velocityFBO.swap();
       }
 
       // 8. Final boundary enforcement
       if (programs.boundary) {
-        gl.bindFramebuffer(gl.FRAMEBUFFER, fbos.velocity.write.framebuffer);
+        gl.bindFramebuffer(gl.FRAMEBUFFER, velocityFBO.write.framebuffer);
         gl.useProgram(programs.boundary.program);
         gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_2D, fbos.velocity.read.texture);
+        gl.bindTexture(gl.TEXTURE_2D, velocityFBO.read.texture);
         gl.uniform1i(programs.boundary.uniforms['u_velocityTexture'], 0);
         gl.uniform2f(programs.boundary.uniforms['u_resolution'], width, height);
 
@@ -473,7 +479,7 @@ export function FluidSimulation({
         gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
-        fbos.velocity.swap();
+        velocityFBO.swap();
       }
 
       // 9. Display dye to screen
@@ -481,7 +487,7 @@ export function FluidSimulation({
         gl.bindFramebuffer(gl.FRAMEBUFFER, null);
         gl.useProgram(programs.display.program);
         gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_2D, fbos.dye.read.texture);
+        gl.bindTexture(gl.TEXTURE_2D, dyeFBO.read.texture);
         gl.uniform1i(programs.display.uniforms['u_texture'], 0);
 
         gl.bindBuffer(gl.ARRAY_BUFFER, quad);
