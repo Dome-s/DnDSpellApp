@@ -25,6 +25,7 @@ export interface FluidSimulationProps {
   jacobiIterations?: number;
   className?: string;
   style?: React.CSSProperties;
+  canvasRef?: React.RefObject<HTMLCanvasElement>;
 }
 
 export function FluidSimulation({
@@ -40,8 +41,10 @@ export function FluidSimulation({
   jacobiIterations = 120,
   className,
   style,
+  canvasRef: externalCanvasRef,
 }: FluidSimulationProps) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const internalCanvasRef = useRef<HTMLCanvasElement>(null);
+  const canvasRef = externalCanvasRef || internalCanvasRef;
   const glRef = useRef<WebGL2RenderingContext | null>(null);
   const [initialized, setInitialized] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -96,7 +99,7 @@ export function FluidSimulation({
     const gl = canvas.getContext('webgl2', {
       alpha: false,
       antialias: false,
-      preserveDrawingBuffer: false,
+      preserveDrawingBuffer: true,
     });
 
     if (!gl) {

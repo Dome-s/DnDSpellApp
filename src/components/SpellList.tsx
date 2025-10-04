@@ -144,7 +144,8 @@ const SpellList: React.FC<SpellListProps> = ({ spells, spellClasses }) => {
     <div className="flex gap-6 p-5 max-w-[2000px] mx-auto">
       <div className="w-80 min-w-80 flex flex-col gap-5">
         {/* Filter Section */}
-        <Card className="backdrop-blur-xl bg-card/80 border-border/50 shadow-lg">
+        <Card className="backdrop-blur-xl bg-card/80 border-border/50 shadow-xl hover:shadow-2xl transition-all duration-500 group relative">
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           <CardContent className="p-5 flex flex-col gap-2.5">
             {/* Search and Like Toggle */}
             <div className="flex items-center gap-2.5">
@@ -301,9 +302,11 @@ const SpellList: React.FC<SpellListProps> = ({ spells, spellClasses }) => {
         </Card>
 
         {/* Liked Info Box */}
-        <Card className="backdrop-blur-xl bg-card/80 border-border/50 shadow-lg">
+        <Card className="backdrop-blur-xl bg-card/80 border-border/50 shadow-xl hover:shadow-2xl transition-all duration-500 group relative">
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-500 via-pink-500 to-purple-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           <CardContent className="p-5">
-            <h3 className="font-cinzel text-lg font-semibold mb-3 bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent">
+            <h3 className="font-cinzel text-lg font-semibold mb-3 bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent flex items-center gap-2">
+              <AiFillHeart className="text-red-500 animate-bounce-subtle" />
               Liked Spells
             </h3>
             <div className="text-sm font-semibold text-foreground mb-3 p-2.5 bg-cyan-500/15 rounded-lg border border-cyan-500/30">
@@ -347,7 +350,7 @@ const SpellList: React.FC<SpellListProps> = ({ spells, spellClasses }) => {
       {/* Spell Cards Container */}
       <div className="flex-1 flex justify-center">
         <ScrollArea className="w-full max-h-[calc(100vh-40px)]">
-          <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-6 p-2 content-start">
+          <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-5 p-1 content-start">
             {filteredSpells &&
               filteredSpells
                 .sort((a, b) => {
