@@ -17,13 +17,13 @@ const FluidSimPage = () => {
           Move your mouse or touch to create fluid dynamics.
         </p>
       </div>
-      <div className="mx-auto" style={{ maxWidth: '1200px', padding: '100px 0' }}>
+      <div className="mx-auto" style={{ maxWidth: '1200px', padding: '20px 0' }}>
         <div className="relative fluid-sim-container" style={{ margin: 0 }}>
-          <AmbientRimLight canvasRef={canvasRef} sampleRate={50} />
+          <AmbientRimLight canvasRef={canvasRef} sampleRate={100} segmentSize={50} />
           <FluidSimulation
             canvasRef={canvasRef}
             width={1024}
-            height={720}
+            height={600}
             dissipation={0.01}
             velDissipation={0.1}
             velocityScale={200}

@@ -54,7 +54,7 @@ export const SpellDetailsModal: React.FC<SpellDetailsModalProps> = ({
 
         <div className="space-y-4">
           {/* Quick Info Section */}
-          <div className="p-4 bg-white/5 rounded-xl space-y-2">
+          <div className="p-4 bg-white/5 light:bg-black/5 rounded-xl space-y-2">
             <p className="text-sm text-secondary-foreground">
               <strong>Level:</strong> {spell.level}
             </p>
@@ -71,7 +71,7 @@ export const SpellDetailsModal: React.FC<SpellDetailsModalProps> = ({
           </div>
 
           {/* Spell Statistics Section */}
-          <div className="p-5 bg-white/5 rounded-xl space-y-2">
+          <div className="p-5 bg-white/5 light:bg-black/5 rounded-xl space-y-2">
             <p className="text-sm text-secondary-foreground">
               <strong>Cast Time:</strong> {spell.time[0].number} {spell.time[0].unit}
             </p>

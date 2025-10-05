@@ -42,6 +42,10 @@
   margin: 0 auto;
 }
 
+.light .home-subtitle {
+  color: rgba(0, 0, 0, 0.7);
+}
+
 .home-projects {
   max-width: 1200px;
   margin: 0 auto;
@@ -56,6 +60,10 @@
   color: rgba(255, 255, 255, 0.95);
   margin-bottom: 3rem;
   position: relative;
+}
+
+.light .projects-heading {
+  color: rgba(0, 0, 0, 0.85);
 }
 
 .projects-heading::after {

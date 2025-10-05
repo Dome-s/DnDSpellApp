@@ -163,7 +163,7 @@ const SpellList: React.FC<SpellListProps> = ({ spells, spellClasses }) => {
                   id="liked-filter"
                 />
                 <label htmlFor="liked-filter" className="cursor-pointer">
-                  <AiFillHeart className={OnlyLikeChecked ? "text-red-500 text-xl" : "text-white/20 text-xl"} />
+                  <AiFillHeart className={OnlyLikeChecked ? "text-red-500 text-xl" : "text-muted-foreground/40 text-xl"} />
                 </label>
               </div>
             </div>

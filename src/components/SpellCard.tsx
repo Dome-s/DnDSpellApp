@@ -4,15 +4,26 @@ import { Badge } from "./ui/badge"
 import { LikeButton } from "./ui/like-button"
 import { extractDiceNotation, extractSaveNotation } from "../utils/spellParsers"
 
-const SCHOOL_COLORS: Record<string, { from: string; to: string; text: string; glow: string }> = {
-  'Abjuration': { from: 'from-blue-500', to: 'to-cyan-400', text: 'text-blue-400', glow: 'shadow-blue-500/50' },
-  'Conjuration': { from: 'from-yellow-500', to: 'to-amber-400', text: 'text-yellow-400', glow: 'shadow-yellow-500/50' },
-  'Divination': { from: 'from-purple-400', to: 'to-pink-400', text: 'text-purple-400', glow: 'shadow-purple-500/50' },
-  'Enchantment': { from: 'from-pink-500', to: 'to-rose-400', text: 'text-pink-400', glow: 'shadow-pink-500/50' },
-  'Evocation': { from: 'from-red-500', to: 'to-orange-400', text: 'text-red-400', glow: 'shadow-red-500/50' },
-  'Illusion': { from: 'from-indigo-500', to: 'to-purple-400', text: 'text-indigo-400', glow: 'shadow-indigo-500/50' },
-  'Necromancy': { from: 'from-green-600', to: 'to-emerald-500', text: 'text-green-400', glow: 'shadow-green-500/50' },
-  'Transmutation': { from: 'from-teal-500', to: 'to-cyan-400', text: 'text-teal-400', glow: 'shadow-teal-500/50' },
+const SCHOOL_NAMES: Record<string, string> = {
+  'A': 'Abjuration',
+  'C': 'Conjuration',
+  'D': 'Divination',
+  'E': 'Enchantment',
+  'V': 'Evocation',
+  'I': 'Illusion',
+  'N': 'Necromancy',
+  'T': 'Transmutation',
+}
+
+const SCHOOL_COLORS: Record<string, { from: string; to: string; text: string; textLight: string; glow: string }> = {
+  'Abjuration': { from: 'from-blue-500', to: 'to-cyan-400', text: 'text-blue-400', textLight: 'light:text-blue-700', glow: 'shadow-blue-500/50' },
+  'Conjuration': { from: 'from-yellow-500', to: 'to-amber-400', text: 'text-yellow-400', textLight: 'light:text-yellow-700', glow: 'shadow-yellow-500/50' },
+  'Divination': { from: 'from-purple-400', to: 'to-pink-400', text: 'text-purple-400', textLight: 'light:text-purple-700', glow: 'shadow-purple-500/50' },
+  'Enchantment': { from: 'from-pink-500', to: 'to-rose-400', text: 'text-pink-400', textLight: 'light:text-pink-700', glow: 'shadow-pink-500/50' },
+  'Evocation': { from: 'from-red-500', to: 'to-orange-400', text: 'text-red-400', textLight: 'light:text-red-700', glow: 'shadow-red-500/50' },
+  'Illusion': { from: 'from-indigo-500', to: 'to-purple-400', text: 'text-indigo-400', textLight: 'light:text-indigo-700', glow: 'shadow-indigo-500/50' },
+  'Necromancy': { from: 'from-green-600', to: 'to-emerald-500', text: 'text-green-400', textLight: 'light:text-green-700', glow: 'shadow-green-500/50' },
+  'Transmutation': { from: 'from-teal-500', to: 'to-cyan-400', text: 'text-teal-400', textLight: 'light:text-teal-700', glow: 'shadow-teal-500/50' },
 }
 
 interface Spell {
@@ -39,7 +50,8 @@ export interface SpellCardProps {
 
 export const SpellCard = React.forwardRef<HTMLDivElement, SpellCardProps>(
   ({ spell, isLiked, onLike, onClick }, ref) => {
-    const schoolColor = SCHOOL_COLORS[spell.school] || SCHOOL_COLORS['Evocation']
+    const schoolName = SCHOOL_NAMES[spell.school] || spell.school
+    const schoolColor = SCHOOL_COLORS[schoolName] || SCHOOL_COLORS['Evocation']
 
     return (
       <Card
@@ -60,8 +72,8 @@ export const SpellCard = React.forwardRef<HTMLDivElement, SpellCardProps>(
           />
 
           <div className="flex items-center justify-between mb-2">
-            <Badge variant="outline" className={`${schoolColor.text} border-${schoolColor.text}/30 bg-${schoolColor.text}/5 text-xs font-semibold px-2 py-0.5`}>
-              {spell.school}
+            <Badge variant="outline" className={`${schoolColor.text} ${schoolColor.textLight} border-${schoolColor.text}/30 bg-${schoolColor.text}/5 text-xs font-semibold px-2 py-0.5`}>
+              {schoolName}
             </Badge>
           </div>
 
@@ -82,13 +94,13 @@ export const SpellCard = React.forwardRef<HTMLDivElement, SpellCardProps>(
             </div>
 
             {extractDiceNotation(spell.entries[0]) && (
-              <Badge variant="outline" className="bg-red-500/10 border-red-400/30 text-red-400 w-fit">
+              <Badge variant="outline" className="bg-red-500/10 border-red-400/30 text-red-400 light:text-red-700 light:border-red-600/50 light:bg-red-500/20 w-fit">
                 {extractDiceNotation(spell.entries[0])}
               </Badge>
             )}
 
             {extractSaveNotation(spell.entries[0]) && (
-              <Badge variant="outline" className="bg-blue-500/15 border-blue-400/30 text-blue-400 w-fit">
+              <Badge variant="outline" className="bg-blue-500/15 border-blue-400/30 text-blue-400 light:text-blue-700 light:border-blue-600/50 light:bg-blue-500/20 w-fit">
                 {extractSaveNotation(spell.entries[0])}
               </Badge>
             )}
