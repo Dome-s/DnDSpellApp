@@ -72,7 +72,7 @@ export const SpellCard = React.forwardRef<HTMLDivElement, SpellCardProps>(
           />
 
           <div className="flex items-center justify-between mb-2">
-            <Badge variant="outline" className={`${schoolColor.text} ${schoolColor.textLight} border-${schoolColor.text}/30 bg-${schoolColor.text}/5 text-xs font-semibold px-2 py-0.5`}>
+            <Badge variant="outline" className={`${schoolColor.text} ${schoolColor.textLight} border-${schoolColor.text}/30 bg-${schoolColor.text}/5 text-xs font-semibold px-2 py-0.5 transition-colors duration-300`}>
               {schoolName}
             </Badge>
           </div>
@@ -87,20 +87,20 @@ export const SpellCard = React.forwardRef<HTMLDivElement, SpellCardProps>(
                 {spell.level}
               </Badge>
               {spell.level === 0 && (
-                <span className="text-[11px] uppercase tracking-wide text-muted-foreground font-semibold">
+                <span className="text-[11px] uppercase tracking-wide text-muted-foreground font-semibold transition-colors duration-300">
                   Cantrip
                 </span>
               )}
             </div>
 
             {extractDiceNotation(spell.entries[0]) && (
-              <Badge variant="outline" className="bg-red-500/10 border-red-400/30 text-red-400 light:text-red-700 light:border-red-600/50 light:bg-red-500/20 w-fit">
+              <Badge variant="outline" className="bg-red-500/10 border-red-400/30 text-red-400 light:text-red-700 light:border-red-600/50 light:bg-red-500/20 w-fit transition-colors duration-300">
                 {extractDiceNotation(spell.entries[0])}
               </Badge>
             )}
 
             {extractSaveNotation(spell.entries[0]) && (
-              <Badge variant="outline" className="bg-blue-500/15 border-blue-400/30 text-blue-400 light:text-blue-700 light:border-blue-600/50 light:bg-blue-500/20 w-fit">
+              <Badge variant="outline" className="bg-blue-500/15 border-blue-400/30 text-blue-400 light:text-blue-700 light:border-blue-600/50 light:bg-blue-500/20 w-fit transition-colors duration-300">
                 {extractSaveNotation(spell.entries[0])}
               </Badge>
             )}

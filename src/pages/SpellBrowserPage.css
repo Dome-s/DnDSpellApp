@@ -1,0 +1,27 @@
+/* Performance optimizations for spell browser */
+/* Use GPU acceleration and reduce repaints */
+.spell-browser-wrapper * {
+  /* Override global transition to be more specific and faster */
+  transition-property: background-color, color, border-color;
+  transition-duration: 0.2s;
+  transition-timing-function: ease-out;
+}
+
+/* Reduce transition overhead on non-interactive elements */
+.spell-browser-wrapper p,
+.spell-browser-wrapper span,
+.spell-browser-wrapper div:not([role]):not([class*="hover"]) {
+  transition-duration: 0.15s;
+}
+
+/* Disable transitions on complex elements during theme change */
+.spell-browser-wrapper [class*="backdrop-blur"],
+.spell-browser-wrapper [class*="shadow"],
+.spell-browser-wrapper [class*="gradient"] {
+  transition-duration: 0.1s;
+}
+
+/* Prevent transition on transform/layout properties during theme change */
+.spell-browser-wrapper *:not(:hover):not(:focus) {
+  transition-property: background-color, color, border-color;
+}

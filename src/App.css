@@ -259,16 +259,16 @@
   background-clip: text;
 }
 
-/* Smooth Transitions */
+/* Smooth Transitions - Optimized for performance */
 * {
-  transition: background-color 0.6s ease, color 0.6s ease, border-color 0.6s ease, background 0.6s ease;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
 /* Smooth theme transition for background layers */
 .App::before,
 .App::after,
 .magical-orb {
-  transition: background 0.8s ease, opacity 0.8s ease, filter 0.8s ease;
+  transition: background 0.6s ease, opacity 0.6s ease, filter 0.6s ease;
 }
 
 /* Performance Optimizations */

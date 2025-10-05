@@ -309,7 +309,7 @@ const SpellList: React.FC<SpellListProps> = ({ spells, spellClasses }) => {
               <AiFillHeart className="text-red-500 animate-bounce-subtle" />
               Liked Spells
             </h3>
-            <div className="text-sm font-semibold text-foreground mb-3 p-2.5 bg-cyan-500/15 rounded-lg border border-cyan-500/30">
+            <div className="text-sm font-semibold text-foreground mb-3 p-2.5 bg-cyan-500/15 rounded-lg border border-cyan-500/30 transition-colors duration-300">
               Total: {likedSpells.length} Spell{likedSpells.length !== 1 ? 's' : ''}
             </div>
 

@@ -15,12 +15,12 @@ const LevelCounter = React.forwardRef<HTMLDivElement, LevelCounterProps>(
       <div
         ref={ref}
         className={cn(
-          "flex flex-col items-center gap-1 p-1.5 bg-white/5 rounded-md hover:bg-cyan-500/15 transition-all",
+          "flex flex-col items-center gap-1 p-1.5 bg-white/5 rounded-md hover:bg-cyan-500/15 transition-colors duration-200",
           className
         )}
         {...props}
       >
-        <span className="text-[9px] font-semibold text-muted-foreground uppercase tracking-wide">
+        <span className="text-[9px] font-semibold text-muted-foreground uppercase tracking-wide transition-colors duration-300">
           Lvl {level}
         </span>
         <div className="w-full h-7 bg-white/5 rounded relative overflow-hidden">
