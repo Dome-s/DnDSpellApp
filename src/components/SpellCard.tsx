@@ -15,15 +15,15 @@ const SCHOOL_NAMES: Record<string, string> = {
   'T': 'Transmutation',
 }
 
-const SCHOOL_COLORS: Record<string, { from: string; to: string; text: string; textLight: string; glow: string }> = {
-  'Abjuration': { from: 'from-blue-500', to: 'to-cyan-400', text: 'text-blue-400', textLight: 'light:text-blue-700', glow: 'shadow-blue-500/50' },
-  'Conjuration': { from: 'from-yellow-500', to: 'to-amber-400', text: 'text-yellow-400', textLight: 'light:text-yellow-700', glow: 'shadow-yellow-500/50' },
-  'Divination': { from: 'from-purple-400', to: 'to-pink-400', text: 'text-purple-400', textLight: 'light:text-purple-700', glow: 'shadow-purple-500/50' },
-  'Enchantment': { from: 'from-pink-500', to: 'to-rose-400', text: 'text-pink-400', textLight: 'light:text-pink-700', glow: 'shadow-pink-500/50' },
-  'Evocation': { from: 'from-red-500', to: 'to-orange-400', text: 'text-red-400', textLight: 'light:text-red-700', glow: 'shadow-red-500/50' },
-  'Illusion': { from: 'from-indigo-500', to: 'to-purple-400', text: 'text-indigo-400', textLight: 'light:text-indigo-700', glow: 'shadow-indigo-500/50' },
-  'Necromancy': { from: 'from-green-600', to: 'to-emerald-500', text: 'text-green-400', textLight: 'light:text-green-700', glow: 'shadow-green-500/50' },
-  'Transmutation': { from: 'from-teal-500', to: 'to-cyan-400', text: 'text-teal-400', textLight: 'light:text-teal-700', glow: 'shadow-teal-500/50' },
+const SCHOOL_COLORS: Record<string, { from: string; to: string; fromLight: string; toLight: string; text: string; textLight: string; glow: string }> = {
+  'Abjuration': { from: 'from-blue-500', to: 'to-cyan-400', fromLight: 'light:from-blue-800', toLight: 'light:to-cyan-800', text: 'text-blue-400', textLight: 'light:text-blue-900', glow: 'shadow-blue-500/50' },
+  'Conjuration': { from: 'from-yellow-700', to: 'to-amber-600', fromLight: 'light:from-yellow-900', toLight: '<light:to-orange-900></light:to-orange-13>00', text: 'text-yellow-600', textLight: 'light:text-yellow-900', glow: 'shadow-yellow-500/50' },
+  'Divination': { from: 'from-purple-400', to: 'to-pink-400', fromLight: 'light:from-purple-800', toLight: 'light:to-fuchsia-800', text: 'text-purple-400', textLight: 'light:text-purple-900', glow: 'shadow-purple-500/50' },
+  'Enchantment': { from: 'from-pink-500', to: 'to-rose-400', fromLight: 'light:from-pink-800', toLight: 'light:to-rose-800', text: 'text-pink-400', textLight: 'light:text-pink-900', glow: 'shadow-pink-500/50' },
+  'Evocation': { from: 'from-red-500', to: 'to-orange-400', fromLight: 'light:from-red-800', toLight: 'light:to-orange-800', text: 'text-red-400', textLight: 'light:text-red-900', glow: 'shadow-red-500/50' },
+  'Illusion': { from: 'from-indigo-500', to: 'to-purple-400', fromLight: 'light:from-indigo-800', toLight: 'light:to-purple-800', text: 'text-indigo-400', textLight: 'light:text-indigo-900', glow: 'shadow-indigo-500/50' },
+  'Necromancy': { from: 'from-green-600', to: 'to-emerald-500', fromLight: 'light:from-green-900', toLight: 'light:to-emerald-900', text: 'text-green-400', textLight: 'light:text-green-950', glow: 'shadow-green-500/50' },
+  'Transmutation': { from: 'from-teal-500', to: 'to-cyan-400', fromLight: 'light:from-teal-800', toLight: 'light:to-cyan-800', text: 'text-teal-400', textLight: 'light:text-teal-900', glow: 'shadow-teal-500/50' },
 }
 
 interface Spell {
@@ -77,13 +77,13 @@ export const SpellCard = React.forwardRef<HTMLDivElement, SpellCardProps>(
             </Badge>
           </div>
 
-          <h2 className={`font-cinzel text-xl font-semibold mb-4 leading-tight max-w-[85%] bg-gradient-to-r ${schoolColor.from} ${schoolColor.to} bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] group-hover:opacity-90 transition-all duration-300`}>
+          <h2 className={`font-cinzel text-xl font-semibold mb-4 leading-tight max-w-[85%] bg-gradient-to-r ${schoolColor.from} ${schoolColor.to} ${schoolColor.fromLight} ${schoolColor.toLight} bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] group-hover:opacity-90 transition-all duration-300`}>
             {spell.name}
           </h2>
 
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-1.5">
-              <Badge className={`bg-gradient-to-br ${schoolColor.from} ${schoolColor.to} text-white shadow-lg min-w-8 h-8 px-2.5 text-base font-bold rounded-lg`}>
+              <Badge className={`bg-gradient-to-br ${schoolColor.from} ${schoolColor.to} ${schoolColor.fromLight} ${schoolColor.toLight} text-white shadow-lg min-w-8 h-8 px-2.5 text-base font-bold rounded-lg`}>
                 {spell.level}
               </Badge>
               {spell.level === 0 && (
