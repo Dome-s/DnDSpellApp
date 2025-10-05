@@ -168,6 +168,151 @@ All UI components are located in `src/components/ui/` and follow shadcn/ui conve
 - **Avoid custom CSS files** - migrate to Tailwind classes in `index.css` or component files
 - **Keep SpellList.css** for legacy compatibility during transition, but prefer Tailwind for new features
 
+## Fluid Simulation
+
+### Overview
+Interactive WebGL2-based Eulerian fluid simulation with real-time rendering. Uses incompressible Navier-Stokes equations solved via projection method with pressure-velocity coupling.
+
+### Architecture
+
+**Location**: `src/components/FluidSim/`
+
+**Key Files**:
+- `FluidSimulation.tsx` - Main React component implementing the simulation loop
+- `webgl-utils.ts` - WebGL2 utilities (FBO creation, program compilation, float texture support detection)
+- `shaders.ts` - GLSL ES 3.0 shaders for all simulation passes
+- `AmbientRimLight.tsx` - Visual effect component that samples canvas edges for ambient lighting
+
+### Component Structure
+
+```
+src/components/FluidSim/
+├── FluidSimulation.tsx    # Main simulation component
+├── AmbientRimLight.tsx    # Edge-sampling rim light effect
+├── webgl-utils.ts         # WebGL2 helper functions
+├── shaders.ts             # All GLSL shaders
+└── index.js               # Barrel export
+```
+
+### Simulation Pipeline
+
+The simulation runs each frame in this order:
+
+1. **Splat Pass** - Add dye color and velocity force on mouse/touch input
+2. **Advect Dye** - Transport dye field along velocity field (semi-Lagrangian advection)
+3. **Advect Velocity** - Self-advect velocity field with dissipation
+4. **Buoyancy** - Apply upward/downward force based on dye density
+5. **Boundary Enforcement** - Apply no-slip boundary conditions at edges
+6. **Divergence Computation** - Calculate divergence of velocity field
+7. **Pressure Solve** - Iterative Jacobi method to solve Poisson equation for pressure
+8. **Projection** - Subtract pressure gradient from velocity to make it divergence-free
+9. **Final Boundary Enforcement** - Re-apply boundaries after projection
+10. **Display** - Render dye texture to screen
+
+### Shaders
+
+All shaders use GLSL ES 3.0 (`#version 300 es`):
+
+- `baseVertexShader` - Shared vertex shader for fullscreen quad rendering
+- `splatShader` - Adds dye/velocity at mouse position with Gaussian falloff
+- `advectDyeShader` - Semi-Lagrangian advection for dye transport
+- `advectVelocityShader` - Semi-Lagrangian advection for velocity with dissipation
+- `buoyancyShader` - Applies buoyancy force based on dye density
+- `boundaryShader` - Enforces no-slip boundary conditions
+- `divergenceShader` - Computes divergence using central differences
+- `jacobiShader` - Single Jacobi iteration for pressure solve
+- `projectionShader` - Subtracts pressure gradient from velocity
+- `displayShader` - Simple passthrough for rendering to screen
+
+### Props
+
+```typescript
+interface FluidSimulationProps {
+  width?: number;           // Simulation resolution width (default: 1024)
+  height?: number;          // Simulation resolution height (default: 720)
+  dissipation?: number;     // Dye dissipation rate (default: 0.01)
+  velDissipation?: number;  // Velocity dissipation rate (default: 0.1)
+  velocityScale?: number;   // Velocity multiplier (default: 200)
+  splatRadius?: number;     // Mouse splat radius (default: 0.3)
+  splatSpeed?: number;      // Velocity force multiplier (default: 20)
+  splatColor?: [r, g, b, a];// Initial dye color (default: [1, 0.4, 0.1, 1])
+  buoyancy?: number;        // Buoyancy force strength (default: -4)
+  jacobiIterations?: number;// Pressure solver iterations (default: 120)
+  className?: string;       // CSS class for canvas
+  style?: React.CSSProperties;
+  canvasRef?: React.RefObject<HTMLCanvasElement>; // External canvas ref for AmbientRimLight
+}
+```
+
+### WebGL2 Requirements
+
+- **Float Textures**: Requires `EXT_color_buffer_float` extension
+- **Texture Formats**: Uses `RGBA16F` or `RGBA32F` for high precision
+- **Format Detection**: `webgl-utils.ts` detects best available float format
+- **Fallback**: Shows error message if float textures unsupported
+
+### Framebuffer Objects (FBOs)
+
+Uses double-buffered FBOs for ping-pong rendering:
+- **dye** - RGBA float texture for dye color
+- **velocity** - RG float texture for velocity field (2-channel)
+- **pressure** - R float texture for pressure field (1-channel)
+- **divergence** - R float texture for divergence (single-use, no swap)
+
+Each FBO has `.read`, `.write`, and `.swap()` for efficient buffer switching.
+
+### Performance Optimizations
+
+- Resolution configurable (lower = faster, higher = more detail)
+- Velocity uses RG format instead of RGBA (2x memory savings)
+- Pressure uses R format instead of RGBA (4x memory savings)
+- Jacobi iterations adjustable (more = accurate, fewer = faster)
+- Uses `requestAnimationFrame` with delta time for smooth rendering
+
+### AmbientRimLight Component
+
+Visual enhancement that samples canvas edges to create ambient glow effect:
+
+**Props**:
+- `canvasRef` - Reference to FluidSimulation canvas
+- `sampleRate` - Sampling frequency in ms (default: 50, higher = slower updates)
+- `segmentSize` - Edge segment size in pixels (default: 25, larger = fewer samples)
+
+**Implementation**:
+- Uses `gl.readPixels()` to sample canvas edges
+- Creates gradient divs around canvas perimeter
+- Averages pixel colors per segment for smooth effect
+- Optimized with configurable sampling rate and batch sampling
+
+### Common Adjustments
+
+**For Better Performance**:
+- Reduce `width`/`height` (e.g., 512x360)
+- Lower `jacobiIterations` (e.g., 60)
+- Increase `sampleRate` for AmbientRimLight (e.g., 100ms)
+- Increase `segmentSize` for AmbientRimLight (e.g., 50px)
+
+**For Higher Quality**:
+- Increase `width`/`height` (e.g., 1920x1080)
+- Increase `jacobiIterations` (e.g., 200)
+- Lower `dissipation` (slower fade, more detail)
+- Lower `sampleRate` (smoother rim light, more CPU)
+
+**For Different Fluid Behavior**:
+- `buoyancy` - Positive floats up, negative sinks down
+- `velDissipation` - Higher = viscous fluid, lower = watery
+- `splatRadius` - Larger = broader strokes
+- `splatSpeed` - Higher = more force, more turbulence
+
+### Browser Compatibility
+
+- Chrome 56+ (WebGL2 support)
+- Firefox 51+ (WebGL2 support)
+- Safari 15+ (WebGL2 support)
+- Edge 79+ (Chromium-based)
+
+Older browsers show error message about float texture support.
+
 ## Source Book Abbreviations
 - PHB = Player's Handbook
 - XGE = Xanathar's Guide to Everything

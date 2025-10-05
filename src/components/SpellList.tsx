@@ -350,7 +350,7 @@ const SpellList: React.FC<SpellListProps> = ({ spells, spellClasses }) => {
       {/* Spell Cards Container */}
       <div className="flex-1 flex justify-center">
         <ScrollArea className="w-full max-h-[calc(100vh-40px)]">
-          <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-5 p-1 content-start">
+          <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-5 p-8 content-start">
             {filteredSpells &&
               filteredSpells
                 .sort((a, b) => {
