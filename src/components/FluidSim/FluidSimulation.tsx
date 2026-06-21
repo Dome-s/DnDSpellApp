@@ -548,7 +548,7 @@ export function FluidSimulation({
 
   if (error) {
     return (
-      <div style={{ color: 'red', padding: '20px' }}>
+      <div className="fluid-sim-error">
         Error: {error}
       </div>
     );
@@ -569,27 +569,10 @@ export function FluidSimulation({
         }}
       />
       <div
-        style={{
-          position: 'absolute',
-          top: '10px',
-          right: '10px',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '10px',
-          background: 'rgba(0, 0, 0, 0.5)',
-          padding: '8px 12px',
-          borderRadius: '8px',
-          zIndex: 10,
-        }}
+        className="fluid-control-panel"
       >
         <label
           htmlFor="color-picker"
-          style={{
-            color: 'white',
-            fontSize: '14px',
-            fontFamily: 'sans-serif',
-            cursor: 'pointer',
-          }}
         >
           Dye Color:
         </label>
@@ -598,13 +581,8 @@ export function FluidSimulation({
           type="color"
           value={rgbToHex(splatColor[0], splatColor[1], splatColor[2])}
           onChange={handleColorChange}
-          style={{
-            width: '40px',
-            height: '30px',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-          }}
+          className="fluid-color-input"
+          aria-label="Dye color"
         />
       </div>
     </div>

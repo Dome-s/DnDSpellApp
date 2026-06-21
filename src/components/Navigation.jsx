@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { ThemeToggle } from './ThemeToggle.tsx';
 import './Navigation.css';
 
 const Navigation = () => {
@@ -9,6 +10,7 @@ const Navigation = () => {
     <nav className="navigation">
       <div className="nav-container">
         <Link to="/" className="nav-logo">
+          <span className="logo-mark" aria-hidden="true">DS</span>
           <span className="logo-text">Portfolio</span>
         </Link>
         <div className="nav-links">
@@ -31,6 +33,7 @@ const Navigation = () => {
             Fluid Simulation
           </Link>
         </div>
+        <ThemeToggle />
       </div>
     </nav>
   );

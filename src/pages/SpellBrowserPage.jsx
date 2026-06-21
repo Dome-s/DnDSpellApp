@@ -24,15 +24,12 @@ const SpellBrowserPage = () => {
 
   return (
     <div className="min-h-screen spell-browser-wrapper">
-      <div className="text-center pt-6 pb-4 px-4">
-        <h1 className="font-cinzel text-4xl md:text-5xl font-bold mb-2">
-          <span className="bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent drop-shadow-[0_2px_8px_rgba(6,182,212,0.5)]">
-           D&D Spell Browser
-          </span>
-        </h1>
-        <p className="text-base text-muted-foreground max-w-2xl mx-auto drop-shadow-sm transition-colors duration-300">
-          A Filterable spelllist for Dungeons & Dragons 5th Edition Spells,
-          built with React and TypeScript. using data from a compiled List of Json Files.
+      <div className="spell-browser-hero">
+        <p className="spell-browser-kicker">D&amp;D 5E Tool</p>
+        <h1>D&amp;D Spell Browser</h1>
+        <p>
+          Search and prepare spells from multiple 5th Edition sourcebooks with
+          compact filters, saved favorites, and readable spell details.
         </p>
       </div>
       <SpellList spells={combinedSpells} spellClasses={spellsClassesData} />

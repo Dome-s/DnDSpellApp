@@ -1,27 +1,111 @@
-/* Performance optimizations for spell browser */
-/* Use GPU acceleration and reduce repaints */
-.spell-browser-wrapper * {
-  /* Override global transition to be more specific and faster */
-  transition-property: background-color, color, border-color;
-  transition-duration: 0.2s;
-  transition-timing-function: ease-out;
+.spell-browser-wrapper {
+  padding: clamp(1.5rem, 4vw, 3rem) 1rem 3rem;
 }
 
-/* Reduce transition overhead on non-interactive elements */
-.spell-browser-wrapper p,
-.spell-browser-wrapper span,
-.spell-browser-wrapper div:not([role]):not([class*="hover"]) {
-  transition-duration: 0.15s;
+.spell-browser-hero {
+  max-width: 1180px;
+  margin: 0 auto 1.5rem;
 }
 
-/* Disable transitions on complex elements during theme change */
-.spell-browser-wrapper [class*="backdrop-blur"],
-.spell-browser-wrapper [class*="shadow"],
-.spell-browser-wrapper [class*="gradient"] {
-  transition-duration: 0.1s;
+.spell-browser-kicker {
+  margin: 0 0 0.6rem;
+  color: #c0a66d;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
-/* Prevent transition on transform/layout properties during theme change */
-.spell-browser-wrapper *:not(:hover):not(:focus) {
-  transition-property: background-color, color, border-color;
+.spell-browser-hero h1 {
+  margin: 0;
+  color: hsl(var(--foreground));
+  font-family: 'Cinzel', serif;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1;
+  text-wrap: balance;
+}
+
+.spell-browser-hero p:last-child {
+  max-width: 700px;
+  margin: 0.85rem 0 0;
+  color: hsl(var(--muted-foreground));
+  font-size: 1rem;
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+
+.spell-results-scroll {
+  overflow: visible;
+}
+
+.liked-summary-grid {
+  display: grid;
+  grid-template-columns: auto minmax(260px, 1fr) minmax(220px, auto);
+  gap: 1rem;
+  align-items: center;
+}
+
+.liked-summary-total {
+  min-width: 120px;
+}
+
+.liked-summary-levels {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.375rem;
+}
+
+.liked-summary-tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+@media (min-width: 1024px) {
+  .spell-results-column {
+    display: flex;
+    min-height: 0;
+    flex-direction: column;
+  }
+
+  .spell-results-scroll {
+    height: calc(100vh - 23rem);
+    min-height: 520px;
+    overflow: hidden;
+  }
+
+  .spell-results-scroll [data-radix-scroll-area-viewport] {
+    height: 100%;
+  }
+}
+
+@media (max-width: 1180px) {
+  .liked-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .liked-summary-tags {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 1023px) {
+  .liked-summary-levels {
+    grid-template-columns: repeat(5, minmax(44px, 1fr));
+  }
+
+  .mobile-filter-dialog {
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    top: auto !important;
+    width: 100% !important;
+    max-width: none !important;
+    transform: none !important;
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+  }
 }

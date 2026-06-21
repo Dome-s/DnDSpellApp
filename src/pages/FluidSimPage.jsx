@@ -7,18 +7,34 @@ const FluidSimPage = () => {
   const canvasRef = useRef(null);
 
   return (
-    <div className="fluid-sim-page">
-      <div className="text-center pt-6 pb-4 px-4">
-        <h1 className="font-cinzel text-4xl md:text-5xl font-bold mb-2 bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent drop-shadow-[0_2px_8px_rgba(6,182,212,0.5)]">
-          Eulerian Fluid Simulation
-        </h1>
-        <p className="text-base text-muted-foreground max-w-2xl mx-auto drop-shadow-sm">
-          An interactive WebGL2-based fluid simulation using the Eulerian method.
-          Move your mouse or touch to create fluid dynamics.
-        </p>
-      </div>
-      <div className="mx-auto" style={{ maxWidth: '1200px', padding: '20px 0' }}>
-        <div className="relative fluid-sim-container" style={{ margin: 0 }}>
+    <main className="fluid-sim-page">
+      <section className="fluid-sim-hero">
+        <p className="fluid-sim-kicker">Simulation</p>
+        <div className="fluid-sim-title-row">
+          <div>
+            <h1>Eulerian Fluid Simulation</h1>
+            <p>
+              A WebGL2 fluid solver with live pointer and touch input. Drag across
+              the canvas to inject dye and velocity into the simulation field.
+            </p>
+          </div>
+          <div className="fluid-sim-meta" aria-label="Simulation details">
+            <span>WebGL2</span>
+            <span>Eulerian Grid</span>
+            <span>Touch Ready</span>
+          </div>
+        </div>
+      </section>
+
+      <section className="fluid-sim-stage" aria-label="Fluid simulation canvas">
+        <div className="fluid-sim-stage-header">
+          <div>
+            <p className="fluid-sim-stage-label">Live Canvas</p>
+            <h2>Drag to disturb the field</h2>
+          </div>
+          <p>Use the color control in the canvas to change dye before drawing.</p>
+        </div>
+        <div className="fluid-sim-container">
           <AmbientRimLight canvasRef={canvasRef} sampleRate={100} segmentSize={50} />
           <FluidSimulation
             canvasRef={canvasRef}
@@ -34,8 +50,8 @@ const FluidSimPage = () => {
             jacobiIterations={120}
           />
         </div>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 };
 

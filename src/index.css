@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Cinzel:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Cinzel:wght@500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,48 +6,52 @@
 
 @layer base {
   :root {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --background: 220 23% 7%;
+    --foreground: 39 28% 93%;
+    --card: 220 18% 10%;
+    --card-foreground: 39 28% 93%;
+    --popover: 220 17% 12%;
+    --popover-foreground: 39 28% 93%;
+    --primary: 37 47% 78%;
+    --primary-foreground: 220 23% 7%;
+    --secondary: 218 15% 15%;
+    --secondary-foreground: 39 22% 88%;
+    --muted: 218 13% 17%;
+    --muted-foreground: 40 11% 62%;
+    --accent: 198 27% 23%;
+    --accent-foreground: 39 30% 92%;
+    --accent-strong: 194 49% 66%;
+    --destructive: 3 61% 42%;
+    --destructive-foreground: 39 28% 93%;
+    --border: 217 13% 22%;
+    --input: 218 13% 16%;
+    --ring: 194 49% 66%;
     --radius: 0.5rem;
+    --shadow-card: 0 0 0 1px rgba(255,255,255,.06), 0 18px 48px rgba(0,0,0,.2);
   }
 
   .light {
-    --background: 36 39% 88%;
-    --foreground: 36 45% 15%;
-    --card: 36 46% 82%;
-    --card-foreground: 36 45% 20%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 36 45% 25%;
-    --primary-foreground: 36 45% 90%;
-    --secondary: 36 30% 70%;
-    --secondary-foreground: 0 0% 0%;
-    --muted: 36 30% 75%;
-    --muted-foreground: 36 10% 40%;
-    --accent: 36 50% 80%;
-    --accent-foreground: 36 45% 25%;
-    --destructive: 0 84% 37%;
-    --destructive-foreground: 36 45% 90%;
-    --border: 36 30% 70%;
-    --input: 36 30% 50%;
-    --ring: 36 45% 30%;
+    --background: 42 36% 92%;
+    --foreground: 36 27% 14%;
+    --card: 40 38% 96%;
+    --card-foreground: 36 27% 14%;
+    --popover: 40 38% 96%;
+    --popover-foreground: 36 27% 14%;
+    --primary: 36 33% 18%;
+    --primary-foreground: 42 36% 92%;
+    --secondary: 39 28% 86%;
+    --secondary-foreground: 36 27% 18%;
+    --muted: 39 26% 86%;
+    --muted-foreground: 35 12% 39%;
+    --accent: 192 28% 82%;
+    --accent-foreground: 193 44% 18%;
+    --accent-strong: 193 61% 32%;
+    --destructive: 3 70% 39%;
+    --destructive-foreground: 42 36% 92%;
+    --border: 38 19% 76%;
+    --input: 38 20% 81%;
+    --ring: 193 61% 32%;
+    --shadow-card: 0 0 0 1px rgba(54,38,22,.08), 0 12px 34px rgba(54,38,22,.08);
   }
 }
 
@@ -59,22 +63,23 @@
 
 html {
   scroll-behavior: smooth;
+  color-scheme: dark;
+}
+
+html.light {
+  color-scheme: light;
 }
 
 body {
   margin: 0;
-  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+  background: hsl(var(--background));
   min-height: 100vh;
   color: hsl(var(--foreground));
   overflow-x: hidden;
-  transition: background 0.3s ease, color 0.3s ease;
-}
-
-.light body {
-  background: linear-gradient(135deg, #f5e6d3, #e8d5c4, #d4bfa8);
+  text-rendering: optimizeLegibility;
 }
 
 code {
@@ -82,59 +87,24 @@ code {
 }
 
 ::selection {
-  background: rgba(147, 51, 234, 0.3);
-  color: #fff;
+  background: color-mix(in srgb, hsl(var(--accent-strong)) 28%, transparent);
+  color: hsl(var(--foreground));
 }
 
 ::-webkit-scrollbar {
-  width: 12px;
+  width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.2);
+  background: hsl(var(--background));
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #7c3aed, #a855f7);
-  border-radius: 6px;
-  border: 2px solid rgba(0, 0, 0, 0.2);
+  background: hsl(var(--muted));
+  border-radius: 999px;
+  border: 2px solid hsl(var(--background));
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #8b5cf6, #c084fc);
-}
-
-/* Playful Animations */
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-}
-
-@keyframes shimmer {
-  0% { background-position: -1000px 0; }
-  100% { background-position: 1000px 0; }
-}
-
-@keyframes sparkle {
-  0%, 100% { opacity: 0; transform: scale(0); }
-  50% { opacity: 1; transform: scale(1); }
-}
-
-@keyframes bounce-subtle {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-5px); }
-}
-
-.animate-float {
-  animation: float 3s ease-in-out infinite;
-}
-
-.animate-shimmer {
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-  background-size: 1000px 100%;
-  animation: shimmer 2s infinite;
-}
-
-.animate-bounce-subtle {
-  animation: bounce-subtle 2s ease-in-out infinite;
+  background: hsl(var(--border));
 }

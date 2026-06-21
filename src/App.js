@@ -2,7 +2,6 @@ import './App.css';
 import { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './contexts/ThemeContext';
-import { ThemeToggle } from './components/ThemeToggle';
 import Navigation from './components/Navigation';
 import Home from './pages/Home';
 
@@ -22,10 +21,6 @@ const App = () => {
     <ThemeProvider>
       <Router>
         <div className="App">
-          <ThemeToggle />
-          <div className="magical-orb magical-orb-1"></div>
-          <div className="magical-orb magical-orb-2"></div>
-          <div className="magical-orb magical-orb-3"></div>
           <div className="app-container">
             <Navigation />
             <Suspense fallback={<LoadingFallback />}>

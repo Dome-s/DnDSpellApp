@@ -17,18 +17,19 @@ const LikeButton = React.forwardRef<HTMLButtonElement, LikeButtonProps>(
         ref={ref}
         variant="ghost"
         size="icon"
-        className={cn("bg-white/10 hover:bg-white/15", className)}
+        className={cn("bg-secondary hover:bg-accent", className)}
         onClick={onClick}
+        aria-label={isLiked ? "Remove from liked spells" : "Add to liked spells"}
       >
         {isLiked ? (
           <AiFillHeart
             className={cn(
               "text-red-500 text-xl",
-              animated && "drop-shadow-[0_0_8px_rgba(239,68,68,0.8)] animate-pulse"
+              animated && "drop-shadow-[0_0_8px_rgba(239,68,68,0.35)]"
             )}
           />
         ) : (
-          <AiFillHeart className="text-white/20 text-xl" />
+          <AiFillHeart className="text-muted-foreground text-xl" />
         )}
       </Button>
     )
