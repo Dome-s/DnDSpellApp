@@ -26,6 +26,7 @@ export interface FluidSimulationProps {
   className?: string;
   style?: React.CSSProperties;
   canvasRef?: React.RefObject<HTMLCanvasElement>;
+  showControls?: boolean;
 }
 
 export function FluidSimulation({
@@ -42,6 +43,7 @@ export function FluidSimulation({
   className,
   style,
   canvasRef: externalCanvasRef,
+  showControls = true,
 }: FluidSimulationProps) {
   const internalCanvasRef = useRef<HTMLCanvasElement>(null);
   const canvasRef = externalCanvasRef || internalCanvasRef;
@@ -90,6 +92,8 @@ export function FluidSimulation({
   const mouseRef = useRef({ x: 0, y: 0, prevX: 0, prevY: 0, down: false });
   const animationRef = useRef<number>(0);
   const lastTimeRef = useRef<number>(0);
+  const lastIdleSplatRef = useRef<number>(0);
+  const seededRef = useRef(false);
 
   // Initialize WebGL
   useEffect(() => {
@@ -282,12 +286,14 @@ export function FluidSimulation({
 
       const texelSize: [number, number] = [1 / width, 1 / height];
 
-      // Splat on mouse input
-      if (mouseRef.current.down && programs.splat) {
-        const dx = mouseRef.current.x - mouseRef.current.prevX;
-        const dy = mouseRef.current.y - mouseRef.current.prevY;
+      const applySplat = (
+        position: [number, number],
+        force: [number, number],
+        color: [number, number, number, number],
+        radius: number
+      ) => {
+        if (!programs.splat) return;
 
-        // Splat dye - write to WRITE buffer, read from READ buffer
         gl.bindFramebuffer(gl.FRAMEBUFFER, dyeFBO.write.framebuffer);
         gl.useProgram(programs.splat.program);
         gl.activeTexture(gl.TEXTURE0);
@@ -296,9 +302,9 @@ export function FluidSimulation({
         gl.activeTexture(gl.TEXTURE1);
         gl.bindTexture(gl.TEXTURE_2D, velocityFBO.read.texture);
         gl.uniform1i(programs.splat.uniforms['u_velocityTexture'], 1);
-        gl.uniform2f(programs.splat.uniforms['u_splatPos'], mouseRef.current.x, mouseRef.current.y);
-        gl.uniform1f(programs.splat.uniforms['u_splatRadius'], splatRadius);
-        gl.uniform4f(programs.splat.uniforms['u_splatColor'], ...splatColor);
+        gl.uniform2f(programs.splat.uniforms['u_splatPos'], position[0], position[1]);
+        gl.uniform1f(programs.splat.uniforms['u_splatRadius'], radius);
+        gl.uniform4f(programs.splat.uniforms['u_splatColor'], ...color);
         gl.uniform2f(programs.splat.uniforms['u_splatForce'], 0, 0);
         gl.uniform1i(programs.splat.uniforms['u_texType'], 0);
 
@@ -309,18 +315,43 @@ export function FluidSimulation({
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
         dyeFBO.swap();
 
-        // Splat velocity - write to WRITE buffer, read from READ buffer
         gl.bindFramebuffer(gl.FRAMEBUFFER, velocityFBO.write.framebuffer);
         gl.activeTexture(gl.TEXTURE1);
         gl.bindTexture(gl.TEXTURE_2D, velocityFBO.read.texture);
         gl.uniform1i(programs.splat.uniforms['u_velocityTexture'], 1);
-        // Apply force - velocity in pixels per second
-        const fx = dx * splatSpeed * width;
-        const fy = dy * splatSpeed * height;
-        gl.uniform2f(programs.splat.uniforms['u_splatForce'], fx, fy);
+        gl.uniform2f(programs.splat.uniforms['u_splatForce'], force[0], force[1]);
         gl.uniform1i(programs.splat.uniforms['u_texType'], 1);
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
         velocityFBO.swap();
+      };
+
+      if (!seededRef.current) {
+        applySplat([0.36, 0.58], [140, -70], splatColor, splatRadius * 1.8);
+        applySplat([0.58, 0.44], [-110, 55], [0.2, 0.68, 0.82, 1], splatRadius * 1.55);
+        applySplat([0.48, 0.68], [60, -120], [1, 0.78, 0.28, 1], splatRadius * 1.25);
+        seededRef.current = true;
+        lastIdleSplatRef.current = time;
+      } else if (mouseRef.current.down) {
+        const dx = mouseRef.current.x - mouseRef.current.prevX;
+        const dy = mouseRef.current.y - mouseRef.current.prevY;
+        applySplat(
+          [mouseRef.current.x, mouseRef.current.y],
+          [dx * splatSpeed * width, dy * splatSpeed * height],
+          splatColor,
+          splatRadius
+        );
+      } else if (time - lastIdleSplatRef.current > 20) {
+        const t = time * 0.001;
+        const x = 0.5 + Math.sin(t * 0.72) * 0.24;
+        const y = 0.52 + Math.cos(t * 0.48) * 0.16;
+        const color: [number, number, number, number] = [
+          splatColor[0] * 0.64 + 0.08,
+          splatColor[1] * 0.64 + 0.08,
+          splatColor[2] * 0.64 + 0.12,
+          1,
+        ];
+        applySplat([x, y], [Math.cos(t) * 64, Math.sin(t * 1.2) * 64], color, splatRadius * 1.15);
+        lastIdleSplatRef.current = time;
       }
 
       // 1. Advect dye
@@ -568,23 +599,25 @@ export function FluidSimulation({
           ...style,
         }}
       />
-      <div
-        className="fluid-control-panel"
-      >
-        <label
-          htmlFor="color-picker"
+      {showControls && (
+        <div
+          className="fluid-control-panel"
         >
-          Dye Color:
-        </label>
-        <input
-          id="color-picker"
-          type="color"
-          value={rgbToHex(splatColor[0], splatColor[1], splatColor[2])}
-          onChange={handleColorChange}
-          className="fluid-color-input"
-          aria-label="Dye color"
-        />
-      </div>
+          <label
+            htmlFor="color-picker"
+          >
+            Dye Color:
+          </label>
+          <input
+            id="color-picker"
+            type="color"
+            value={rgbToHex(splatColor[0], splatColor[1], splatColor[2])}
+            onChange={handleColorChange}
+            className="fluid-color-input"
+            aria-label="Dye color"
+          />
+        </div>
+      )}
     </div>
   );
 }

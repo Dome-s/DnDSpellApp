@@ -1,35 +1,41 @@
 .spell-browser-wrapper {
-  padding: clamp(1.5rem, 4vw, 3rem) 1rem 3rem;
+  padding: clamp(1.25rem, 3vw, 2.25rem) 1rem 3rem;
 }
 
 .spell-browser-hero {
-  max-width: 1180px;
-  margin: 0 auto 1.5rem;
+  max-width: 1400px;
+  margin: 0 auto 1.25rem;
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr);
+  gap: 1.25rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid hsl(var(--border));
 }
 
 .spell-browser-kicker {
-  margin: 0 0 0.6rem;
-  color: #c0a66d;
-  font-size: 0.76rem;
+  margin: 0;
+  color: hsl(var(--muted-foreground));
+  font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
 .spell-browser-hero h1 {
+  grid-column: 2;
   margin: 0;
   color: hsl(var(--foreground));
-  font-family: 'Cinzel', serif;
-  font-size: clamp(2rem, 5vw, 3.5rem);
-  font-weight: 700;
-  letter-spacing: -0.035em;
-  line-height: 1;
+  font-size: clamp(2.2rem, 5.5vw, 4.5rem);
+  font-weight: 760;
+  letter-spacing: -0.07em;
+  line-height: 0.9;
   text-wrap: balance;
 }
 
 .spell-browser-hero p:last-child {
-  max-width: 700px;
-  margin: 0.85rem 0 0;
+  grid-column: 2;
+  max-width: 760px;
+  margin: 0.9rem 0 0;
   color: hsl(var(--muted-foreground));
   font-size: 1rem;
   line-height: 1.6;
@@ -38,6 +44,88 @@
 
 .spell-results-scroll {
   overflow: visible;
+}
+
+.spell-browser-layout {
+  align-items: start;
+}
+
+.spell-browser-layout aside .sticky {
+  top: 4.9rem;
+}
+
+.spell-browser-layout aside [class*="rounded-lg"],
+.spell-results-column [class*="rounded-lg"],
+.mobile-filter-dialog {
+  border-radius: var(--radius) !important;
+  box-shadow: none !important;
+}
+
+.spell-browser-layout aside [class*="bg-card"] {
+  background: color-mix(in srgb, hsl(var(--background)) 66%, hsl(var(--card))) !important;
+}
+
+.spell-browser-layout aside label,
+.spell-browser-layout aside button,
+.spell-browser-layout aside [role="combobox"],
+.mobile-filter-dialog label,
+.mobile-filter-dialog button,
+.mobile-filter-dialog [role="combobox"] {
+  min-height: 38px;
+}
+
+.spell-browser-layout aside input,
+.mobile-filter-dialog input {
+  height: 38px;
+}
+
+.liked-filter-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0 0.75rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  background: hsl(var(--secondary));
+  color: hsl(var(--secondary-foreground));
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-align: left;
+  transition: border-color 150ms, background-color 150ms, color 150ms;
+}
+
+.liked-filter-toggle:hover {
+  border-color: color-mix(in srgb, hsl(var(--foreground)) 24%, hsl(var(--border)));
+  color: hsl(var(--foreground));
+}
+
+.liked-filter-toggle:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
+
+.liked-filter-toggle.is-active {
+  border-color: color-mix(in srgb, #ef4444 36%, hsl(var(--border)));
+  background: color-mix(in srgb, #ef4444 10%, hsl(var(--secondary)));
+  color: hsl(var(--foreground));
+}
+
+.spell-results-column > div:first-child,
+.spell-results-column > div:nth-child(2) {
+  box-shadow: none !important;
+}
+
+.spell-results-column [role="button"][tabindex="0"] {
+  min-height: 192px;
+  border-radius: var(--radius) !important;
+  box-shadow: none !important;
+  transition-property: border-color, background-color, transform;
+  transition-duration: 150ms;
+}
+
+.spell-results-column [role="button"][tabindex="0"]:hover {
+  transform: translateY(-1px);
 }
 
 .liked-summary-grid {
@@ -93,6 +181,15 @@
 }
 
 @media (max-width: 1023px) {
+  .spell-browser-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .spell-browser-hero h1,
+  .spell-browser-hero p:last-child {
+    grid-column: auto;
+  }
+
   .liked-summary-levels {
     grid-template-columns: repeat(5, minmax(44px, 1fr));
   }

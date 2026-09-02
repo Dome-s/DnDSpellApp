@@ -88,7 +88,7 @@ export const SpellCard = React.forwardRef<HTMLDivElement, SpellCardProps>(
               >
                 {schoolName}
               </Badge>
-              <h2 className="max-w-[92%] text-balance font-cinzel text-xl font-semibold leading-tight text-foreground">
+              <h2 className="max-w-[92%] text-balance text-xl font-semibold leading-tight tracking-[-0.035em] text-foreground">
                 {spell.name}
               </h2>
             </div>
@@ -105,7 +105,7 @@ export const SpellCard = React.forwardRef<HTMLDivElement, SpellCardProps>(
 
           <div className="mt-auto grid grid-cols-2 gap-2 text-sm">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">Circle</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">Level</p>
               <p className="font-medium text-foreground">{formatLevel(spell.level)}</p>
             </div>
             <div>
@@ -120,7 +120,7 @@ export const SpellCard = React.forwardRef<HTMLDivElement, SpellCardProps>(
               <p className="font-medium text-foreground">{formatRange(spell)}</p>
             </div>
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">Focus</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">Concentration</p>
               <p className="font-medium text-foreground">{spell.duration[0].concentration ? "Concentration" : "No"}</p>
             </div>
           </div>

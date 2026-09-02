@@ -91,11 +91,11 @@ export const SpellDetailsModal: React.FC<SpellDetailsModalProps> = ({
                 </Badge>
               )}
             </div>
-            <DialogTitle className="font-cinzel text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
+            <DialogTitle className="text-3xl font-semibold leading-tight tracking-[-0.045em] text-foreground sm:text-4xl">
               {spell.name}
             </DialogTitle>
             <DialogDescription className="text-sm text-muted-foreground">
-              Source: {spell.source}{classes ? ` · Classes: ${classes}` : ""}
+              Source: {spell.source}{classes ? ` / Classes: ${classes}` : ""}
             </DialogDescription>
           </DialogHeader>
 

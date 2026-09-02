@@ -9,9 +9,10 @@ This is a D&D 5e spell reference application built with React and Electron. It a
 ## Commands
 
 ### Development
-- `npm start` - Start React dev server on http://localhost:3000
-- `npm test` - Run tests in watch mode
-- `npm run build` - Build production React app to `build/` folder
+- `npm start` - Start the Vite dev server on http://localhost:5173
+- `npm test` - Run Vitest in watch mode
+- `npm run test:run` - Run Vitest once
+- `npm run build` - Build the production app to the `dist/` folder
 
 ### Electron (Desktop App)
 - `npm run electron-start` - Run Electron app in development (starts React dev server + Electron)
@@ -50,8 +51,8 @@ src/
 │   └── useLocalStorage.js # Persist state to localStorage
 ├── constants/          # App constants
 │   └── spellConstants.js  # Spell levels, types, filter options
-├── App.js             # Root component - combines spell data
-├── index.js           # App entry point
+├── App.jsx            # Root component and routes
+├── index.jsx          # App entry point
 └── index.css          # Global styles with Tailwind directives
 ```
 
@@ -63,7 +64,7 @@ src/
   - Structure: `{ "SourceBook": { "SpellName": { "class": [{ "name": "ClassName", "source": "PHB" }] } } }`
 
 ### Component Architecture
-- `App.js`: Combines all spell JSON files from `data/` into a single array and passes to SpellList component
+- `App.jsx`: Defines the application providers and routes
 - `SpellList.tsx`: Main component (TypeScript) containing:
   - **State Management**: Multiple filter states (level, class, type, concentration, action, radius, attack type, component) + search + favorites
   - **localStorage Integration**: Uses `useLocalStorage` hook to persist liked spells across sessions
@@ -95,9 +96,9 @@ src/
 - **Component Filtering**: Filter shows spells that DON'T have selected component (inverse logic)
 
 ### Electron Integration
-- Entry point: `public/electron.js`
-- Development: Loads from localhost:3000 with DevTools
-- Production: Loads from `build/index.html`
+- Entry point: `electron.cjs`
+- Development: Loads from localhost:5173 with DevTools
+- Production: Loads from `dist/index.html`
 - Window size: 800x600 default
 
 ## UI Component System

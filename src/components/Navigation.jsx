@@ -10,7 +10,6 @@ const Navigation = () => {
     <nav className="navigation">
       <div className="nav-container">
         <Link to="/" className="nav-logo">
-          <span className="logo-mark" aria-hidden="true">DS</span>
           <span className="logo-text">Portfolio</span>
         </Link>
         <div className="nav-links">
@@ -31,6 +30,12 @@ const Navigation = () => {
             className={`nav-link ${location.pathname === '/fluid-simulation' ? 'active' : ''}`}
           >
             Fluid Simulation
+          </Link>
+          <Link
+            to="/3d-test"
+            className={`nav-link ${location.pathname === '/3d-test' ? 'active' : ''}`}
+          >
+            Infinite Hallway
           </Link>
         </div>
         <ThemeToggle />

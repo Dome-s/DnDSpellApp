@@ -1,26 +1,28 @@
 .fluid-sim-page {
   width: 100%;
   min-height: 100vh;
-  padding: clamp(1.5rem, 4vw, 3rem) 1rem 3rem;
+  padding: clamp(1.25rem, 3vw, 2.25rem) 1rem 3rem;
 }
 
 .fluid-sim-hero,
 .fluid-sim-stage {
-  max-width: 1180px;
+  max-width: 1400px;
   margin: 0 auto;
 }
 
 .fluid-sim-hero {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid hsl(var(--border));
 }
 
 .fluid-sim-kicker,
 .fluid-sim-stage-label {
   margin: 0 0 0.6rem;
-  color: #6bb6c9;
-  font-size: 0.76rem;
+  color: hsl(var(--muted-foreground));
+  font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
@@ -34,10 +36,10 @@
 .fluid-sim-title-row h1 {
   margin: 0;
   color: hsl(var(--foreground));
-  font-size: clamp(2rem, 5vw, 3.5rem);
-  font-weight: 700;
-  letter-spacing: -0.05em;
-  line-height: 1;
+  font-size: clamp(2.2rem, 5.5vw, 4.5rem);
+  font-weight: 760;
+  letter-spacing: -0.07em;
+  line-height: 0.9;
   text-wrap: balance;
 }
 
@@ -60,20 +62,21 @@
 
 .fluid-sim-meta span {
   border: 1px solid hsl(var(--border));
-  border-radius: 999px;
-  background: hsl(var(--secondary));
+  border-radius: var(--radius);
+  background: transparent;
   color: hsl(var(--secondary-foreground));
-  padding: 0.35rem 0.65rem;
-  font-size: 0.8rem;
-  font-weight: 600;
+  padding: 0.45rem 0.65rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
 }
 
 .fluid-sim-stage {
   overflow: hidden;
   border: 1px solid hsl(var(--border));
-  border-radius: 10px;
+  border-radius: var(--radius);
   background: hsl(var(--card));
-  box-shadow: var(--shadow-card);
+  box-shadow: none;
 }
 
 .fluid-sim-stage-header {
@@ -113,6 +116,24 @@
     #050608;
 }
 
+.fluid-interaction-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 1rem;
+  z-index: 12;
+  transform: translateX(-50%);
+  padding: 0.55rem 0.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(3, 4, 5, 0.66);
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  backdrop-filter: blur(12px);
+  pointer-events: none;
+}
+
 .fluid-sim-container canvas {
   display: block;
   width: 100%;
@@ -131,7 +152,7 @@
   min-height: 44px;
   padding: 0.45rem 0.55rem 0.45rem 0.8rem;
   border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 8px;
+  border-radius: var(--radius);
   background: rgba(5, 6, 8, 0.72);
   color: #f5efe2;
   backdrop-filter: blur(14px);
@@ -194,5 +215,9 @@
     bottom: 0.75rem;
     left: 0.75rem;
     justify-content: space-between;
+  }
+
+  .fluid-interaction-hint {
+    display: none;
   }
 }

@@ -9,7 +9,6 @@ import { Button } from './ui/button';
 import { Card, CardContent } from './ui/card';
 import { Input } from './ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { Checkbox } from './ui/checkbox';
 import { ScrollArea } from './ui/scroll-area';
 import { StatBadge } from './ui/stat-badge';
 import { LevelCounter } from './ui/level-counter';
@@ -176,18 +175,23 @@ const SpellList: React.FC<SpellListProps> = ({ spells, spellClasses }) => {
         <Input
           id={compact ? 'mobile-spell-search' : 'spell-search'}
           type="text"
-          placeholder="Magic missile…"
+          placeholder="Magic missile..."
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
           className="h-11 bg-input text-base md:text-sm"
         />
       </div>
 
-      <label className="flex min-h-11 cursor-pointer items-center gap-3 rounded-lg border border-border bg-secondary px-3 text-sm font-medium">
-        <Checkbox checked={onlyLikedChecked} onCheckedChange={() => setOnlyLikedChecked((checked) => !checked)} id={compact ? 'mobile-liked-filter' : 'liked-filter'} />
+      <button
+        type="button"
+        id={compact ? 'mobile-liked-filter' : 'liked-filter'}
+        aria-pressed={onlyLikedChecked}
+        className={`liked-filter-toggle ${onlyLikedChecked ? 'is-active' : ''}`}
+        onClick={() => setOnlyLikedChecked((checked) => !checked)}
+      >
         <AiFillHeart className={onlyLikedChecked ? 'text-red-500' : 'text-muted-foreground'} aria-hidden="true" />
         Only liked spells
-      </label>
+      </button>
 
       <Select value={orderSelected} onValueChange={setSelectedOrder}>
         <SelectTrigger className="h-11 bg-input">

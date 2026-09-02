@@ -35,6 +35,9 @@ const FluidSimPage = () => {
           <p>Use the color control in the canvas to change dye before drawing.</p>
         </div>
         <div className="fluid-sim-container">
+          <div className="fluid-interaction-hint" aria-hidden="true">
+            Drag to inject dye + velocity
+          </div>
           <AmbientRimLight canvasRef={canvasRef} sampleRate={100} segmentSize={50} />
           <FluidSimulation
             canvasRef={canvasRef}

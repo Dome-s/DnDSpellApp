@@ -4,8 +4,8 @@
   width: 100%;
   overflow-x: hidden;
   background:
-    radial-gradient(circle at top left, rgba(58, 47, 33, 0.28), transparent 32rem),
-    radial-gradient(circle at 80% 10%, rgba(39, 73, 92, 0.2), transparent 28rem),
+    radial-gradient(circle at 100% 0%, rgba(255,255,255,.045), transparent 28rem),
+    linear-gradient(180deg, color-mix(in srgb, hsl(var(--background)) 88%, #000 12%), hsl(var(--background)) 24rem),
     hsl(var(--background));
 }
 
@@ -16,16 +16,13 @@
   z-index: -1;
   pointer-events: none;
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
-  background-size: 48px 48px;
-  mask-image: linear-gradient(to bottom, black, transparent 82%);
+    linear-gradient(90deg, rgba(255,255,255,.035), transparent 18%, transparent 82%, rgba(255,255,255,.025));
 }
 
 .light .App {
   background:
-    radial-gradient(circle at top left, rgba(214, 178, 126, 0.3), transparent 34rem),
-    radial-gradient(circle at 85% 5%, rgba(86, 109, 116, 0.13), transparent 28rem),
+    radial-gradient(circle at 100% 0%, rgba(20,18,14,.055), transparent 28rem),
+    linear-gradient(180deg, color-mix(in srgb, hsl(var(--background)) 92%, #fff 8%), hsl(var(--background)) 24rem),
     hsl(var(--background));
 }
 
@@ -85,7 +82,7 @@
   background: hsl(var(--card));
   border: 1px solid hsl(var(--border));
   border-radius: var(--radius);
-  box-shadow: var(--shadow-card);
+  box-shadow: none;
 }
 
 .text-gradient {
@@ -105,6 +102,6 @@
 
 @media (max-width: 768px) {
   .App::before {
-    background-size: 36px 36px;
+    background-size: auto;
   }
 }
